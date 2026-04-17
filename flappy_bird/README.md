@@ -1,6 +1,6 @@
-# 🐤 Flappy Bird
+# 🐤 Fifty Bird (Flappy Bird clone)
 
-🕹️ [Play it online](https://vitorbetmann.itch.io/fifty-bird)  
+🕹️ [Play it on itch.io](https://vitorbetmann.itch.io/fifty-bird)  
 
 ## Remarks
 
@@ -9,9 +9,13 @@
 - Applied tracked iteration optimization so the Bird only checks collision with the next pipe, reducing per-frame computation.
 
 
-## Smile Features Used
+## Featuring Smile's
 
+#### Modules:
 - SceneManager
+
+#### Tools:
+- GenScene
 
 ## Learning outcomes:
 
