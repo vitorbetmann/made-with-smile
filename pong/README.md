@@ -3,8 +3,10 @@
 🕹️ [Play it on itch.io](https://vitorbetmann.itch.io/pong)
 
 ## Featuring Smile's
+
 #### Modules:
 - SceneManager
+
 #### Tools:
 - GenScene
 
