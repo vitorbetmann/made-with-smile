@@ -1,59 +1,53 @@
+// —————————————————————————————————————————————————————————————————————————————————————————————————
+// Includes
+// —————————————————————————————————————————————————————————————————————————————————————————————————
+
 #include "Ball.h"
 #include "Settings.h"
-#include <raylib.h>
 
-Ball NewBall() {
-  Ball newBall = {0};
-  BallSetXSpeedRandom(&newBall);
-  BallReset(&newBall);
-  return newBall;
+// —————————————————————————————————————————————————————————————————————————————————————————————————
+// Variables
+// —————————————————————————————————————————————————————————————————————————————————————————————————
+
+const int BALL_SIZE = 4;
+const int BALL_SPEED_X = 100;
+const int BALL_SPEED_Y = 50;
+
+// —————————————————————————————————————————————————————————————————————————————————————————————————
+// Functions
+// —————————————————————————————————————————————————————————————————————————————————————————————————
+
+void ballReset(Player server)
+{
+    ball.x = VIRTUAL_WIDTH / 2 - 2;
+    ball.y = VIRTUAL_HEIGHT / 2 - 2;
+
+    switch (server.id)
+    {
+    case 1:
+        ball.dx = BALL_SPEED_X;
+        break;
+    case 2:
+        ball.dx = -BALL_SPEED_X;
+        break;
+    default:
+        ball.dx = GetRandomValue(0, 1) == 0 ? BALL_SPEED_X : -BALL_SPEED_X;
+    }
+    ball.dy = GetRandomValue(-50, 50);
 }
 
-void BallUpdate(Ball *ball, float dt) {
-  ball->left += ball->xSpeed * dt;
-  ball->top += ball->ySpeed * dt;
+void ballUpdate(const float dt)
+{
+    ball.x += ball.dx * dt;
+    ball.y += ball.dy * dt;
 }
 
-void BallDraw(Ball *ball) {
-  DrawRectangle(ball->left, ball->top, BALLSIZE, BALLSIZE, WHITE);
+void ballDraw(void)
+{
+    DrawRectangle(ball.x, ball.y, BALL_SIZE, BALL_SIZE, WHITE);
 }
 
-void BallReset(Ball *ball) {
-  BallSetYSpeedRandom(ball, false);
-  ball->left = (V_WIDTH - BALLSIZE) / 2.0;
-  ball->top = (V_HEIGHT - BALLSIZE) / 2.0;
-  ball->xSpeed = (ball->xSpeed > 0 ? -1 : 1) * BALL_X_SPEED;
-}
-
-bool BallHitBoundaries(Ball *ball) {
-  if (ball->top < 0) {
-    ball->top = 0;
-    BallInvertYSpeed(ball);
-    return true;
-  } else if (ball->top + BALLSIZE > V_HEIGHT) {
-    ball->top = V_HEIGHT - BALLSIZE;
-    BallInvertYSpeed(ball);
-    return true;
-  }
-  return false;
-}
-
-void BallInvertXSpeed(Ball *ball) {
-  ball->xSpeed *= -1.03;
-  BallSetYSpeedRandom(ball, true);
-}
-
-void BallInvertYSpeed(Ball *ball) { ball->ySpeed *= -1; }
-
-void BallSetXSpeedRandom(Ball *ball) {
-  ball->xSpeed = GetRandomValue(0, 1) % 2 == 0 ? -BALL_X_SPEED : BALL_X_SPEED;
-}
-
-void BallSetYSpeedRandom(Ball *ball, bool keepDirection) {
-  float ogDir = ball->ySpeed;
-  int speed = GetRandomValue(0, BALL_Y_SPEED_MAX);
-  ball->ySpeed = (GetRandomValue(0, 1) % 2 == 0) ? -speed : speed;
-  if (keepDirection && ball->ySpeed * ogDir < 0) {
-    ball->ySpeed *= -1;
-  }
+Rectangle ballGetRect(void)
+{
+    return (Rectangle){ball.x, ball.y, BALL_SIZE, BALL_SIZE};
 }

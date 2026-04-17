@@ -1,39 +1,29 @@
-#ifndef SETTINGS_H
-#define SETTINGS_H
+#ifndef START_H
+#define START_H
 
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 // Includes
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 
-#include <raylib.h>
-
-#include "Ball.h"
-#include "Player.h"
-
+#include "Settings.h"
 
 // —————————————————————————————————————————————————————————————————————————————————————————————————
-// Variables
+// Data type
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 
-extern Ball ball;
-extern Player player1, player2;
+typedef struct
+{
+    Player winner;
+} StartData;
 
-extern RenderTexture2D vWindow;
-extern Font font;
+// —————————————————————————————————————————————————————————————————————————————————————————————————
+// Prototypes
+// —————————————————————————————————————————————————————————————————————————————————————————————————
 
-extern Sound paddle_hit, score, wall_hit;
+void StartEnter(void *args);
 
-extern const int WINDOW_WIDTH;
-extern const int WINDOW_HEIGTH;
+void StartUpdate(float dt);
 
-extern const int VIRTUAL_WIDTH;
-extern const int VIRTUAL_HEIGHT;
-
-extern const int FONTLARGE;
-extern const int FONTSMALL;
-extern const float FONTRAYLIB;
-extern const Color COLORBG;
-
-extern const int MAX_SCORE;
+void StartDraw(void);
 
 #endif

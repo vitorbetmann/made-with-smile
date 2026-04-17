@@ -1,39 +1,35 @@
-#ifndef SETTINGS_H
-#define SETTINGS_H
-
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 // Includes
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 
 #include <raylib.h>
 
+#include "Settings.h"
 #include "Ball.h"
-#include "Player.h"
-
+#include "Paddle.h"
 
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 // Variables
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 
-extern Ball ball;
-extern Player player1, player2;
+Ball ball;
+Player player1, player2;
 
-extern RenderTexture2D vWindow;
-extern Font font;
+RenderTexture2D vWindow;
+Font font;
 
-extern Sound paddle_hit, score, wall_hit;
+Sound paddle_hit, score, wall_hit;
 
-extern const int WINDOW_WIDTH;
-extern const int WINDOW_HEIGTH;
+const int WINDOW_WIDTH = 1280;
+const int WINDOW_HEIGTH = 720;
 
-extern const int VIRTUAL_WIDTH;
-extern const int VIRTUAL_HEIGHT;
+const int VIRTUAL_WIDTH = 432;
+const int VIRTUAL_HEIGHT = 243;
 
-extern const int FONTLARGE;
-extern const int FONTSMALL;
-extern const float FONTRAYLIB;
-extern const Color COLORBG;
+const int FONTLARGE = 32;
+const int FONTSMALL = 8;
+const float FONTRAYLIB = 10.0f;
 
-extern const int MAX_SCORE;
+const Color COLORBG = {45, 45, 52, 255};
 
-#endif
+const int MAX_SCORE = 10;

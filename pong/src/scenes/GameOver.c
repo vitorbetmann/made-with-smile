@@ -1,39 +1,50 @@
-#ifndef BALL_H
-#define BALL_H
-
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 // Includes
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 
+#include <stdio.h>
 #include <raylib.h>
+#include <SceneManager.h>
 
-#include "Player.h"
-
-// —————————————————————————————————————————————————————————————————————————————————————————————————
-// Data types
-// —————————————————————————————————————————————————————————————————————————————————————————————————
-
-typedef struct
-{
-    float x, y;
-    float dx, dy;
-} Ball;
+#include "GameOver.h"
+#include "Start.h"
+#include "Settings.h"
 
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 // Variables
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 
-extern const int BALL_SIZE;
-extern const int BALL_SPEED_X;
-extern const int BALL_SPEED_Y;
+static Player winner;
 
 // —————————————————————————————————————————————————————————————————————————————————————————————————
-// Prototypes
+// Functions
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 
-void ballReset(Player server);
-void ballUpdate(const float dt);
-void ballDraw(void);
-Rectangle ballGetRect(void);
+void GameOverEnter(void *args)
+{
+    GameOverData *d = args;
+    winner = d->winner;
+}
 
-#endif
+void GameOverUpdate(float dt)
+{
+    if (IsKeyPressed(KEY_ENTER))
+    {
+        smSetScene("start", &(StartData){winner});
+    }
+}
+
+void GameOverDraw(void)
+{
+    char txt[32];
+    snprintf(txt, 32, "Player %d wins!", winner.id);
+    Vector2 txtSize = MeasureTextEx(font, txt, FONTLARGE, FONTLARGE / FONTRAYLIB);
+    Vector2 txtPos = {(VIRTUAL_WIDTH - txtSize.x) / 2, 20};
+    DrawTextEx(font, txt, txtPos, FONTLARGE, FONTLARGE / FONTRAYLIB, WHITE);
+
+    snprintf(txt, 32, "Press ENTER to to play again!");
+    txtSize = MeasureTextEx(font, txt, FONTSMALL, FONTSMALL / FONTRAYLIB);
+    txtPos.x = (VIRTUAL_WIDTH - txtSize.x) / 2;
+    txtPos.y = 60;
+    DrawTextEx(font, txt, txtPos, FONTSMALL, FONTSMALL / FONTRAYLIB, WHITE);
+}

@@ -1,20 +1,38 @@
 #ifndef PADDLE_H
 #define PADDLE_H
 
-// Defines
-#define PADDLE_WIDTH 5
-#define PADDLE_HEIGHT 20
-#define PADDLE_SPEED 200
+// —————————————————————————————————————————————————————————————————————————————————————————————————
+// Includes
+// —————————————————————————————————————————————————————————————————————————————————————————————————
 
-// Data Types
-typedef struct {
-  float left;
-  float top;
-  bool AIEnabled;
+#include <raylib.h>
+
+// —————————————————————————————————————————————————————————————————————————————————————————————————
+// Data types
+// —————————————————————————————————————————————————————————————————————————————————————————————————
+
+typedef struct
+{
+    float x, y;
+    bool isAI;
 } Paddle;
 
+// —————————————————————————————————————————————————————————————————————————————————————————————————
+// Variables
+// —————————————————————————————————————————————————————————————————————————————————————————————————
+
+extern const int PADDLE_HEIGHT;
+extern const int PADDLE_WIDTH;
+extern const int PADDLE_SPEED;
+
+// —————————————————————————————————————————————————————————————————————————————————————————————————
 // Prototypes
-void PaddleMoveUp(Paddle *paddle, float dt);
-void PaddleMoveDown(Paddle *paddle, float dt);
-void PaddleDraw(Paddle *paddle);
+// —————————————————————————————————————————————————————————————————————————————————————————————————
+
+void paddleUp(Paddle *p, const float dt);
+void paddleDown(Paddle *p, const float dt);
+void paddleDraw(const Paddle *p);
+void paddleAI(Paddle *p, float dt);
+Rectangle paddleGetRect(const Paddle *p);
+
 #endif

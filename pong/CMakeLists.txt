@@ -1,56 +1,37 @@
-cmake_minimum_required(VERSION 4.0.2)
+cmake_minimum_required(VERSION 4.2)
+project(pong C)
 
-# ----------------------------
-# Set proj name from root name
-# ----------------------------
-cmake_path(GET CMAKE_CURRENT_SOURCE_DIR FILENAME PROJECT_NAME)
-project(${PROJECT_NAME} VERSION 1.0 LANGUAGES C)
-
-# --------
-# Busywork
-# --------
 set(CMAKE_C_STANDARD 23)
-set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-include(sources.cmake)
-add_executable(${PROJECT_NAME} ${SOURCES})
+# Define paths to your local raylib installation
+find_package(raylib REQUIRED)
 
-# ------------
-# Raylib setup
-# ------------
-set(RAYLIB_DIR "$ENV{HOME}/_dev/raylib")
-set(RAYLIB_SRC_DIR "${RAYLIB_DIR}/src")
-set(RAYLIB_LIB_PATH "${RAYLIB_SRC_DIR}") # Defaults to native build
+add_executable(pong 
+        main.c
 
-# -------------------------
-# Platform specific configs
-# -------------------------
-if(EMSCRIPTEN)
-    set(RAYLIB_LIB_PATH "${RAYLIB_DIR}/build_web/raylib")
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS}
-        -s USE_GLFW=3
-        -s ASSERTIONS=1
-        -s WASM=1
-        -s ASYNCIFY
-        -s GL_ENABLE_GET_PROC_ADDRESS=1
-        -s EXPORTED_RUNTIME_METHODS=['ccall','HEAPF32']
-        --preload-file ../assets@assets
-        --shell-file ${RAYLIB_SRC_DIR}/minshell.html
-        ")
-    set(CMAKE_EXECUTABLE_SUFFIX ".html")
-    target_compile_definitions(${PROJECT_NAME} PRIVATE PLATFORM_WEB)
-    set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME "index")
-elseif(APPLE)
-    target_link_libraries(${PROJECT_NAME} PRIVATE
-        "-framework IOKit"
-        "-framework Cocoa"
-        "-framework CoreFoundation")
-endif()
+        src/Ball.c
+        src/Paddle.c
+        src/Settings.c
+        
+        src/scenes/Start.c
+        src/scenes/Serve.c
+        src/scenes/Play.c
+        src/scenes/GameOver.c
+)
 
-# --------------------------------------------
-# Apply include and library settings to target
-# --------------------------------------------
-target_include_directories(${PROJECT_NAME} PRIVATE "${RAYLIB_SRC_DIR}" "${CMAKE_CURRENT_SOURCE_DIR}/include")
-target_link_directories(${PROJECT_NAME} PRIVATE "${RAYLIB_LIB_PATH}")
-target_link_libraries(${PROJECT_NAME} PRIVATE "raylib")
+# Add Smile as a subdirectory
+add_subdirectory(smile)
+
+# Include Smile headers
+target_include_directories(pong PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/smile/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/scenes
+)
+
+# Link against the Smile and the raylib static libraries
+target_link_libraries(pong PRIVATE
+        smile
+        raylib
+)

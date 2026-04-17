@@ -1,39 +1,61 @@
-#ifndef BALL_H
-#define BALL_H
-
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 // Includes
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 
+#include <stdio.h>
 #include <raylib.h>
+#include <SceneManager.h>
 
-#include "Player.h"
+#include "Settings.h"
 
-// —————————————————————————————————————————————————————————————————————————————————————————————————
-// Data types
-// —————————————————————————————————————————————————————————————————————————————————————————————————
-
-typedef struct
-{
-    float x, y;
-    float dx, dy;
-} Ball;
+#include "Serve.h"
+#include "Play.h"
 
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 // Variables
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 
-extern const int BALL_SIZE;
-extern const int BALL_SPEED_X;
-extern const int BALL_SPEED_Y;
+static int server;
 
 // —————————————————————————————————————————————————————————————————————————————————————————————————
-// Prototypes
+
+// Functions
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 
-void ballReset(Player server);
-void ballUpdate(const float dt);
-void ballDraw(void);
-Rectangle ballGetRect(void);
+void ServeEnter(void *args)
+{
+    ServeData *d = args ? args : nullptr;
+    if (d)
+    {
+        ballReset(d->server);
+    }
+    server = ball.dx > 0 ? 1 : 2;
+}
 
-#endif
+void ServeUpdate(float dt)
+{
+    if (IsKeyPressed(KEY_ENTER))
+    {
+        if (!smSceneExists("play"))
+        {
+            smCreateScene("play", nullptr, PlayUpdate, nullptr, PlayExit);
+        }
+
+        smSetScene("play", nullptr);
+    }
+}
+
+void ServeDraw(void)
+{
+    char txt[32];
+    snprintf(txt, 32, "Player %d's serve!", server);
+    Vector2 txtSize = MeasureTextEx(font, txt, 12, 1.2f);
+    Vector2 txtPos = {(VIRTUAL_WIDTH - txtSize.x) / 2, 20};
+    DrawTextEx(font, txt, txtPos, 12, 1.2f, WHITE);
+
+    snprintf(txt, 32, "Press ENTER to serve!");
+    txtSize = MeasureTextEx(font, txt, 12, 1.2f);
+    txtPos.x = (VIRTUAL_WIDTH - txtSize.x) / 2;
+    txtPos.y = 40;
+    DrawTextEx(font, txt, txtPos, 12, 1.2f, WHITE);
+}
