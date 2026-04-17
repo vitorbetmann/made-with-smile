@@ -6,8 +6,8 @@
 
 ## 🐤 Fifty Bird (Flappy Bird clone)
 - 🗃️ [Repo](https://github.com/vitorbetmann/made_with_smile/tree/main/flappy_bird)
-- 🕹️ [Play it online](https://vitorbetmann.itch.io/fifty-bird)
+- 🕹️ [Play it on itch.io](https://vitorbetmann.itch.io/fifty-bird)
 
 ## 🟢 Pong
 - 🗃️ [Repo](https://github.com/vitorbetmann/made_with_smile/tree/main/pong)
-- 🕹️ [Play it online](https://vitorbetmann.itch.io/pong)
+- 🕹️ [Play it on itch.io](https://vitorbetmann.itch.io/pong)
