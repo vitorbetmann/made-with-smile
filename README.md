@@ -5,7 +5,7 @@
 #### All games were made with [raylib](https://www.raylib.com) for rendering, sound, and input-gathering.
 
 ## 🐤 Fifty Bird (Flappy Bird clone)
-- 🗃️ [Repo](https://github.com/vitorbetmann/made_with_smile/tree/main/flappy_bird)
+- 🗃️ [Repo](https://github.com/vitorbetmann/made_with_smile/tree/main/fifty-bird)
 - 🕹️ [Play it on itch.io](https://vitorbetmann.itch.io/fifty-bird)
 
 ## 🟢 Pong
