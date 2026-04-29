@@ -6,7 +6,7 @@
 
 ## 🧱 Breakout
 - 🗃️ [Repo](https://github.com/vitorbetmann/made_with_smile/tree/main/breakout)
-- 🕹️ [Play it on itch.io](https://vitorbetmann.itch.io/breakout) (Not available yet)
+- 🕹️ [Play it on itch.io](https://vitorbetmann.itch.io/breakout)
 
 ## 🐤 Fifty Bird (Flappy Bird clone)
 - 🗃️ [Repo](https://github.com/vitorbetmann/made_with_smile/tree/main/fifty-bird)
