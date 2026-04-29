@@ -12,7 +12,7 @@
 - GenScene
 
 ## External Libraries
-- raylib
+- [raylib](https://www.raylib.com)
 
 ## Learning outcomes:
 
