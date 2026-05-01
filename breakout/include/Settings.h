@@ -10,27 +10,19 @@
 // Data types
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 
-typedef enum {
-  SMALL = 8,
-  MEDIUM = 16,
-  LARGE = 32,
-} gFontSize;
+typedef enum
+{
+    SMALL_FONT = 8,
+    MEDIUM_FONT = 16,
+    LARGE_FONT = 32,
+} FontSize;
 
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 // Variables
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 
-// UI
-extern Texture pauseTexture;
-extern const char *GAME_TITLE;
-
-// Sounds and Music
-extern Music music;
-
-// Fonts
-
-// Background
-extern Texture background;
+// Font
+extern Font gFont;
 
 // Window
 extern const int WINDOW_WIDTH;

@@ -8,19 +8,8 @@
 // Variables
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 
-RenderTexture2D vWindow;
-
-// UI
-Texture pauseTexture;
-const char *GAME_TITLE;
-
-// Sounds and Music
-Music music;
-
-// Fonts
-
-// Background
-Texture background;
+// Font
+Font gFont;
 
 // Window
 const int WINDOW_WIDTH = 1280;

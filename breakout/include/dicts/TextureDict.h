@@ -11,18 +11,20 @@
 // Data types
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 
-typedef struct {
-  int id;
-  Texture texture;
-  UT_hash_handle hh;
+typedef struct
+{
+    int id;
+    Texture texture;
+    UT_hash_handle hh;
 } TextureDict;
 
-typedef enum {
-  BACKGROUND,
-  MAIN,
-  ARROWS,
-  HEARTS,
-  PARTICLES,
+typedef enum
+{
+    ARROWS,
+    BACKGROUND,
+    MAIN,
+    HEARTS,
+    PARTICLE,
 } TextureName;
 
 // —————————————————————————————————————————————————————————————————————————————————————————————————
