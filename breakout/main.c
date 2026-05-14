@@ -63,7 +63,7 @@ void load(void)
     // fonts
     gFont = LoadFont("assets/fonts/font.ttf");
 
-    // sounds and music
+    // sounds
     sdAdd(PADDLE_HIT, "assets/sounds/paddle_hit.wav");
     sdAdd(SCORE, "assets/sounds/score.wav");
     sdAdd(WALL_HIT, "assets/sounds/wall_hit.wav");
@@ -78,6 +78,7 @@ void load(void)
     sdAdd(HIGH_SCORE, "assets/sounds/high_score.wav");
     sdAdd(PAUSE, "assets/sounds/pause.wav");
 
+    // music
     music = LoadMusicStream("assets/sounds/music.wav");
     PlayMusicStream(music);
 
@@ -146,8 +147,9 @@ void unload(void)
 
     // fonts
 
-    // sounds and music
+    // sounds
     sdUnloadAll();
+    // music
     UnloadMusicStream(music);
 
     CloseAudioDevice();

@@ -4,7 +4,10 @@ project(breakout C)
 set(CMAKE_C_STANDARD 23)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-find_package(raylib REQUIRED)
+add_library(raylib STATIC IMPORTED GLOBAL)
+set_target_properties(raylib PROPERTIES
+        IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/libs/libraylib.a
+)
 
 add_executable(breakout
         main.c
@@ -37,4 +40,9 @@ target_include_directories(breakout PRIVATE
 target_link_libraries(breakout PRIVATE
         smile
         raylib
+        "-framework CoreVideo"
+        "-framework IOKit"
+        "-framework Cocoa"
+        "-framework GLUT"
+        "-framework OpenGL"
 )

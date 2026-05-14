@@ -8,6 +8,7 @@
 #include "Start.h"
 #include "PaddleSelect.h"
 #include "HighScore.h"
+#include "Play.h"
 
 #include "Settings.h"
 #include "SoundDict.h"
@@ -21,7 +22,7 @@ static constexpr char START_OPTION[] = "START";
 static constexpr char HIGH_SCORES_OPTION[] = "HIGH SCORES";
 
 static constexpr Color HIGHLIGHT = {103, 255, 255, 255};
-static int highlighted;
+static int highlightedOption;
 
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 // Functions
@@ -32,27 +33,32 @@ void StartUpdate(float dt)
     if (IsKeyPressed(KEY_UP))
     {
         PlaySound(*sdFind(PADDLE_HIT));
-        highlighted--;
-        highlighted = highlighted < 0 ? 1 : highlighted;
+        highlightedOption--;
+        highlightedOption = highlightedOption < 0 ? 1 : highlightedOption;
     }
     else if (IsKeyPressed(KEY_DOWN))
     {
         PlaySound(*sdFind(PADDLE_HIT));
-        highlighted++;
-        highlighted %= 2;
+        highlightedOption++;
+        highlightedOption %= 2;
     }
 
     if (IsKeyPressed(KEY_ENTER))
     {
-        switch (highlighted)
+        switch (highlightedOption)
         {
         case 1:
-            if (!smSceneExists("paddle select"))
+            // if (!smSceneExists("paddle select"))
+            // {
+            //     smCreateScene("paddle select", PaddleSelectEnter, PaddleSelectUpdate,
+            //                   PaddleSelectDraw, PaddleSelectExit);
+            // }
+            // smSetScene("paddle select", nullptr);
+            if (!smSceneExists("play"))
             {
-                smCreateScene("paddle select", PaddleSelectEnter, PaddleSelectUpdate,
-                              PaddleSelectDraw, PaddleSelectExit);
+                smCreateScene("play", PlayEnter, PlayUpdate, PlayDraw, PlayExit);
             }
-            smSetScene("paddle select", nullptr);
+            smSetScene("play", nullptr);
             break;
         case 2:
             if (!smSceneExists("high score"))
@@ -76,14 +82,14 @@ void StartDraw(void)
     DrawTextEx(gFont, GAME_TITLE, (Vector2){textX, (float)VIRTUAL_HEIGHT / 3},
                (float)LARGE_FONT, spacing, WHITE);
 
-    Color currColor = highlighted == 0 ? HIGHLIGHT : WHITE;
+    Color currColor = highlightedOption == 0 ? HIGHLIGHT : WHITE;
     spacing = (float)MEDIUM_FONT / 10;
     textSize = MeasureTextEx(gFont, START_OPTION, (float)MEDIUM_FONT, spacing);
     textX = ((float)VIRTUAL_WIDTH - textSize.x) / 2.0f;
     DrawTextEx(gFont, START_OPTION, (Vector2){textX, (float)VIRTUAL_HEIGHT / 2 + 70},
                (float)MEDIUM_FONT, spacing, currColor);
 
-    currColor = highlighted == 1 ? HIGHLIGHT : WHITE;
+    currColor = highlightedOption == 1 ? HIGHLIGHT : WHITE;
     spacing = (float)MEDIUM_FONT / 10;
     textSize = MeasureTextEx(gFont, HIGH_SCORES_OPTION, (float)MEDIUM_FONT, spacing);
     textX = ((float)VIRTUAL_WIDTH - textSize.x) / 2.0f;
