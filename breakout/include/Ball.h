@@ -4,17 +4,33 @@
 // Includes
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 
-#include <raylib.h>
+#include "raylib.h"
 
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 // Data types
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 
+typedef struct
+{
+    Rectangle rect;
+    float x, y;
+    float dx, dy;
+    int skin;
+} Ball;
+
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 // Prototypes
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 
-void GenPaddleQuads(void);
-Rectangle GetPaddleQuad(void);
-void GenBallQuads(void);
-Rectangle GetBallQuad(void);
+void BallInit(int skin);
+void BallReset(void);
+void BallUpdate(float dt);
+void BallDraw(void);
+Rectangle BallGetRect(void);
+
+// —————————————————————————————————————————————————————————————————————————————————————————————————
+// Variables
+// —————————————————————————————————————————————————————————————————————————————————————————————————
+
+extern Ball ball;
+extern const int BALL_SIZE;

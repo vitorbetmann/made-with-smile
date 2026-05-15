@@ -2,84 +2,81 @@
 // Includes
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 
-#include <raylib.h>
-#include <SceneManager.h>
-
-#include "Play.h"
-
 #include "Ball.h"
-#include "Dependencies.h"
-#include "Paddle.h"
+
+#include "Constants.h"
+#include "SoundDict.h"
+#include "TextureDict.h"
+#include "Util.h"
 
 // —————————————————————————————————————————————————————————————————————————————————————————————————
-// Defines
+// Data types
 // —————————————————————————————————————————————————————————————————————————————————————————————————
-
-
-// —————————————————————————————————————————————————————————————————————————————————————————————————
-// Data Types
-// —————————————————————————————————————————————————————————————————————————————————————————————————
-
 
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 // Prototypes
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 
-
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 // Variables
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 
-static bool isPaused;
+Ball ball;
+const int BALL_SIZE = 8;
 
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 // Functions
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 
-void PlayEnter(void *args)
+void BallInit(const int skin)
 {
-    PaddleInit();
-    BallInit(0);
+    BallReset();
+    ball.skin = skin;
 }
 
-void PlayUpdate(const float dt)
+void BallUpdate(const float dt)
 {
-    if (IsKeyPressed(KEY_SPACE))
+    ball.x += ball.dx * dt;
+    ball.y += ball.dy * dt;
+
+    if (ball.x <= 0)
     {
-        isPaused = !isPaused;
-        PlaySound(*sdFind(PAUSE));
+        ball.x = 0;
+        ball.dx *= -1;
+        PlaySound(*sdFind(WALL_HIT));
     }
 
-    if (isPaused)
+    if (ball.x >= (float)VIRTUAL_WIDTH - 8)
     {
-        return;
+        ball.x = (float)VIRTUAL_WIDTH - 8;
+        ball.dx *= -1;
+        PlaySound(*sdFind(WALL_HIT));
     }
 
-    PaddleUpdate(dt);
-    BallUpdate(dt);
-
-    if (CheckCollisionRecs(BallGetRect(), PaddleGetRect()))
+    if (ball.y <= 0)
     {
+        ball.y = 0;
         ball.dy *= -1;
-        PlaySound(*sdFind(PADDLE_HIT));
+        PlaySound(*sdFind(WALL_HIT));
     }
 }
 
-void PlayDraw(void)
+void BallDraw(void)
 {
-    PaddleDraw();
-    BallDraw();
-    if (isPaused)
-    {
-        constexpr float spacing = (float)LARGE_FONT / 10;
-        const Vector2 textSize = MeasureTextEx(gFont, "PAUSED", (float)LARGE_FONT, spacing);
-        const float textX = ((float)VIRTUAL_WIDTH - textSize.x) / 2.0f;
-        DrawTextEx(gFont, "PAUSED", (Vector2){textX, (float)VIRTUAL_HEIGHT / 2 - 16},
-                   (float)LARGE_FONT, spacing, WHITE);
-    }
+    const Rectangle dest = {ball.x, ball.y, (float)BALL_SIZE, (float)BALL_SIZE};
+    DrawTexturePro(*tdFind(MAIN), GetBallQuad(), dest, (Vector2){0}, 0, WHITE);
 }
 
-void PlayExit(void)
+void BallReset(void)
 {
-    // TODO
+    ball.x = VIRTUAL_WIDTH / 2 - BALL_SIZE / 2;
+    ball.y = VIRTUAL_HEIGHT / 2 - BALL_SIZE / 2;
+
+    ball.dx = (float)GetRandomValue(-200, 200);
+    ball.dy = (float)GetRandomValue(-50, -60);
+}
+
+Rectangle BallGetRect(void)
+{
+    return (Rectangle){ball.x, ball.y, (float)BALL_SIZE, (float)BALL_SIZE};
 }

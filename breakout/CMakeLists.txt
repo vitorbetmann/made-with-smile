@@ -13,6 +13,7 @@ add_executable(breakout
         main.c
 
         src/Paddle.c
+        src/Ball.c
         src/Util.c
         src/Constants.c
 

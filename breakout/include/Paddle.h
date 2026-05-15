@@ -36,6 +36,7 @@ typedef struct
 void PaddleInit(void);
 void PaddleUpdate(float dt);
 void PaddleDraw(void);
+Rectangle PaddleGetRect(void);
 
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 // Variables
