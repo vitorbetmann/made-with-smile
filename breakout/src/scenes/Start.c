@@ -10,7 +10,7 @@
 #include "HighScore.h"
 #include "Play.h"
 
-#include "Settings.h"
+#include "Constants.h"
 #include "SoundDict.h"
 
 // —————————————————————————————————————————————————————————————————————————————————————————————————
@@ -47,7 +47,7 @@ void StartUpdate(float dt)
     {
         switch (highlightedOption)
         {
-        case 1:
+        case 0:
             // if (!smSceneExists("paddle select"))
             // {
             //     smCreateScene("paddle select", PaddleSelectEnter, PaddleSelectUpdate,
@@ -60,7 +60,7 @@ void StartUpdate(float dt)
             }
             smSetScene("play", nullptr);
             break;
-        case 2:
+        case 1:
             if (!smSceneExists("high score"))
             {
                 smCreateScene("high score", HighScoreEnter, HighScoreUpdate, HighScoreDraw,

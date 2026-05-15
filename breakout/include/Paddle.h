@@ -1,74 +1,44 @@
+#pragma once
+
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 // Includes
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 
-#include <raylib.h>
-#include <SceneManager.h>
-
-#include "Play.h"
-#include "Dependencies.h"
-#include "Paddle.h"
+#include "Constants.h"
 
 // —————————————————————————————————————————————————————————————————————————————————————————————————
-// Defines
+// Data types
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 
+typedef enum
+{
+    P_SMALL = 32,
+    P_MEDIUM = 64,
+    P_LARGE = 96,
+    P_HUGE = 128,
 
-// —————————————————————————————————————————————————————————————————————————————————————————————————
-// Data Types
-// —————————————————————————————————————————————————————————————————————————————————————————————————
+    P_HEIGHT = 16
+} PaddleSize;
 
+typedef struct
+{
+    float x, y;
+    float dx;
+    int width, height;
+    int skin;
+    int size;
+} Paddle;
 
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 // Prototypes
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 
+void PaddleInit(void);
+void PaddleUpdate(float dt);
+void PaddleDraw(void);
 
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 // Variables
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 
-static bool isPaused;
-
-// —————————————————————————————————————————————————————————————————————————————————————————————————
-// Functions
-// —————————————————————————————————————————————————————————————————————————————————————————————————
-
-void PlayEnter(void *args)
-{
-    PaddleInit();
-}
-
-void PlayUpdate(const float dt)
-{
-    if (IsKeyPressed(KEY_SPACE))
-    {
-        isPaused = !isPaused;
-        PlaySound(*sdFind(PAUSE));
-    }
-
-    if (isPaused)
-    {
-        return;
-    }
-
-    PaddleUpdate(dt);
-}
-
-void PlayDraw(void)
-{
-    PaddleDraw();
-    if (isPaused)
-    {
-        constexpr float spacing = (float)LARGE_FONT / 10;
-        const Vector2 textSize = MeasureTextEx(gFont, "PAUSED", (float)LARGE_FONT, spacing);
-        const float textX = ((float)VIRTUAL_WIDTH - textSize.x) / 2.0f;
-        DrawTextEx(gFont, "PAUSED", (Vector2){textX, (float)VIRTUAL_HEIGHT / 2 - 16},
-                   (float)LARGE_FONT, spacing, WHITE);
-    }
-}
-
-void PlayExit(void)
-{
-    // TODO
-}
+extern Paddle paddle;

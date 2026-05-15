@@ -2,73 +2,73 @@
 // Includes
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 
-#include <raylib.h>
-#include <SceneManager.h>
+#include <math.h>
 
-#include "Play.h"
-#include "Dependencies.h"
 #include "Paddle.h"
 
-// —————————————————————————————————————————————————————————————————————————————————————————————————
-// Defines
-// —————————————————————————————————————————————————————————————————————————————————————————————————
-
-
-// —————————————————————————————————————————————————————————————————————————————————————————————————
-// Data Types
-// —————————————————————————————————————————————————————————————————————————————————————————————————
-
-
-// —————————————————————————————————————————————————————————————————————————————————————————————————
-// Prototypes
-// —————————————————————————————————————————————————————————————————————————————————————————————————
-
+#include "Constants.h"
+#include "TextureDict.h"
+#include "Util.h"
 
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 // Variables
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 
-static bool isPaused;
+// static void PaddleInit(void);
 
 // —————————————————————————————————————————————————————————————————————————————————————————————————
-// Functions
+// Variables
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 
-void PlayEnter(void *args)
+static constexpr int PADDLE_SPEED = 200;
+Paddle paddle;
+
+// —————————————————————————————————————————————————————————————————————————————————————————————————
+// Functions - Public
+// —————————————————————————————————————————————————————————————————————————————————————————————————
+
+void PaddleInit(void)
 {
-    PaddleInit();
+    paddle.x = (float)VIRTUAL_WIDTH / 2 - 32;
+    paddle.y = (float)VIRTUAL_HEIGHT - 32;
+    paddle.dx = 0;
+    paddle.width = 64;
+    paddle.height = 16;
+    paddle.skin = 1;
+    paddle.size = 2;
 }
 
-void PlayUpdate(const float dt)
+void PaddleUpdate(const float dt)
 {
-    if (IsKeyPressed(KEY_SPACE))
+    if (IsKeyDown(KEY_LEFT))
     {
-        isPaused = !isPaused;
-        PlaySound(*sdFind(PAUSE));
+        paddle.dx = -PADDLE_SPEED;
+    }
+    else if (IsKeyDown(KEY_RIGHT))
+    {
+        paddle.dx = PADDLE_SPEED;
+    }
+    else
+    {
+        paddle.dx = 0;
     }
 
-    if (isPaused)
+    if (paddle.dx < 0)
     {
-        return;
+        paddle.x = fmaxf(0, paddle.x + paddle.dx * dt);
     }
-
-    PaddleUpdate(dt);
-}
-
-void PlayDraw(void)
-{
-    PaddleDraw();
-    if (isPaused)
+    else
     {
-        constexpr float spacing = (float)LARGE_FONT / 10;
-        const Vector2 textSize = MeasureTextEx(gFont, "PAUSED", (float)LARGE_FONT, spacing);
-        const float textX = ((float)VIRTUAL_WIDTH - textSize.x) / 2.0f;
-        DrawTextEx(gFont, "PAUSED", (Vector2){textX, (float)VIRTUAL_HEIGHT / 2 - 16},
-                   (float)LARGE_FONT, spacing, WHITE);
+        paddle.x = fminf(paddle.x + paddle.dx * dt, (float)(VIRTUAL_WIDTH - paddle.width));
     }
 }
 
-void PlayExit(void)
+void PaddleDraw(void)
 {
-    // TODO
+    const Rectangle dest = {paddle.x, paddle.y, (float)paddle.width, (float)paddle.height};
+    DrawTexturePro(*tdFind(MAIN), GetPaddleQuad(), dest, (Vector2){0}, 0, WHITE);
 }
+
+// —————————————————————————————————————————————————————————————————————————————————————————————————
+// Functions - Static
+// —————————————————————————————————————————————————————————————————————————————————————————————————

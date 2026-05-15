@@ -86,6 +86,8 @@ void load(void)
     smStart();
     smCreateScene("start", nullptr, StartUpdate, StartDraw, StartExit);
     smSetScene("start", nullptr);
+
+    GenPaddleQuads();
 }
 
 void update(const float dt)

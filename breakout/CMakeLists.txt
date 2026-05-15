@@ -12,7 +12,9 @@ set_target_properties(raylib PROPERTIES
 add_executable(breakout
         main.c
 
-        src/Settings.c
+        src/Paddle.c
+        src/Util.c
+        src/Constants.c
 
         src/dicts/TextureDict.c
         src/dicts/SoundDict.c
