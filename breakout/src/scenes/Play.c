@@ -2,6 +2,7 @@
 // Includes
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 
+#include <math.h>
 #include <raylib.h>
 #include <SceneManager.h>
 
@@ -11,18 +12,6 @@
 #include "Dependencies.h"
 #include "LevelMaker.h"
 #include "Paddle.h"
-
-// —————————————————————————————————————————————————————————————————————————————————————————————————
-// Defines
-// —————————————————————————————————————————————————————————————————————————————————————————————————
-
-// —————————————————————————————————————————————————————————————————————————————————————————————————
-// Data Types
-// —————————————————————————————————————————————————————————————————————————————————————————————————
-
-// —————————————————————————————————————————————————————————————————————————————————————————————————
-// Prototypes
-// —————————————————————————————————————————————————————————————————————————————————————————————————
 
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 // Variables
@@ -56,12 +45,63 @@ void PlayUpdate(const float dt)
 
     if (CheckCollisionRecs(BallGetRect(), PaddleGetRect()))
     {
-        ball.y = paddle.y + (float)BALL_SIZE;
+        ball.y = paddle.y - (float)BALL_SIZE;
         ball.dy *= -1;
+
+        const bool isPaddleMovingLeft = paddle.dx < 0;
+        const bool isPaddleMovingRight = paddle.dx > 0;
+        const float paddleCenter = paddle.x + (float)paddle.width / 2;
+        const float ballOffset = fabsf(ball.x - paddleCenter);
+
+        if (ball.x < paddleCenter && isPaddleMovingLeft)
+        {
+            ball.dx = (float)-STARTING_BOUNCE_DX - (float)BOUNCE_ANGLE_MULTIPLIER * ballOffset;
+        }
+        else if (ball.x > paddleCenter && isPaddleMovingRight)
+        {
+            ball.dx = (float)STARTING_BOUNCE_DX + (float)BOUNCE_ANGLE_MULTIPLIER * ballOffset;
+        }
+
         PlaySound(*sdFind(PADDLE_HIT));
+        return;
     }
 
-    LevelCheckBrickCollision();
+    const Brick *colBrick = LevelCheckBrickCollision();
+    if (colBrick)
+    {
+        // Centers of X and Y of brick
+        const float centerBrickX = colBrick->x + (float)BRICK_WIDTH / 2;
+        const float centerBrickY = colBrick->y + (float)BRICK_HEIGHT / 2;
+
+        // Centers of X and Y of ball
+        const float centerBallX = ball.x + (float)BALL_SIZE / 2;
+        const float centerBallY = ball.y + (float)BALL_SIZE / 2;
+
+        // Signed collision offsets between brick and ball
+        const float offsetX = centerBrickX - centerBallX;
+        const float offsetY = centerBrickY - centerBallY;
+
+        // Penetration depth of the ball on X and Y;
+        // Add half-extents of brick and ball, then subtract
+        // amount of overlap on that axis; the higher penetration
+        // depth is the prioritized collision and axis of bounce
+        const float penX = (float)(BRICK_WIDTH + BALL_SIZE) / 2 - fabsf(offsetX);
+        const float penY = (float)(BRICK_HEIGHT + BALL_SIZE) / 2 - fabsf(offsetY);
+
+        if (penX < penY)
+        {
+            ball.dx *= -1;
+            ball.x += offsetX > 0 ? -penX : penX;
+        }
+        else
+        {
+            ball.dy *= -1;
+            ball.y += offsetY > 0 ? -penY : penY;
+        }
+
+        // Slightly scale the y velocity to speed up the game
+        ball.dy *= 1.02f;
+    }
 }
 
 void PlayDraw(void)

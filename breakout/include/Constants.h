@@ -31,3 +31,8 @@ extern const int WINDOW_HEIGHT;
 // Virtual Window
 extern const int VIRTUAL_WIDTH;
 extern const int VIRTUAL_HEIGHT;
+
+// Ball Behaviour
+extern const int STARTING_BOUNCE_DX;
+extern const int BOUNCE_ANGLE_MULTIPLIER;
+
