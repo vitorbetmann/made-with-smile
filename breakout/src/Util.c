@@ -5,34 +5,45 @@
 #include "Util.h"
 
 #include "Ball.h"
+#include "Brick.h"
 #include "Paddle.h"
 
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 // Variables
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 
-// Atlas data
+// Paddle data
 static constexpr int PADDLES_ORIGIN_X = 0;
 static constexpr int PADDLES_ORIGIN_Y = 64;
 
-static constexpr int BALLS_ORIGIN_X = 96;
-static constexpr int BALLS_ORIGIN_Y = 48;
-static constexpr int BALLS_AMOUNT_ROW_1 = 4;
-static constexpr int BALLS_AMOUNT_ROW_2 = 3;
-
-// Paddle data
 static constexpr int PADDLE_SIZES = 4;
 static constexpr int PADDLE_COLORS = 4;
 
+// Ball data
+static constexpr int BALLS_ORIGIN_X = 96;
+static constexpr int BALLS_ORIGIN_Y = 48;
+
+static constexpr int BALLS_IN_ROW_1 = 4;
+static constexpr int BALLS_IN_ROW_2 = 3;
+
+// Brick data
+static constexpr int BRICK_COLORS = 4;
+static constexpr int BRICK_TIERS = 5;
+static constexpr int BRICK_SPECIAL = 1;
+
+static constexpr int BRICK_ROWS = 4;
+static constexpr int BRICK_COLS = 6;
+
 // Quad arrays data
 static constexpr int PADDLE_ARRAY_SIZE = PADDLE_SIZES * PADDLE_COLORS;
-static constexpr int BALL_ARRAY_SIZE = 7;
+static constexpr int BALL_ARRAY_SIZE = BALLS_IN_ROW_1 + BALLS_IN_ROW_2;
+static constexpr int BRICK_ARRAY_SIZE = BRICK_COLORS * BRICK_TIERS + BRICK_SPECIAL;
 static constexpr int HEART_ARRAY_SIZE = 2; // Full or empty
-static constexpr int BRICK_ARRAY_SIZE = 21; // BRICK_COLORS(4) * BRICK_TIERS(5) + BRICK_SPECIAL(1)
 
 // Quad arrays declaration
 static Rectangle paddleQuads[PADDLE_ARRAY_SIZE];
 static Rectangle ballQuads[BALL_ARRAY_SIZE];
+static Rectangle brickQuads[BRICK_ARRAY_SIZE];
 
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 // Functions
@@ -95,7 +106,7 @@ void GenBallQuads(void)
 {
     Vector2 origin = {.x = BALLS_ORIGIN_X, .y = BALLS_ORIGIN_Y};
 
-    for (int i = 0; i < BALLS_AMOUNT_ROW_1; i++)
+    for (int i = 0; i < BALLS_IN_ROW_1; i++)
     {
         Rectangle ballRect = {0};
 
@@ -109,9 +120,9 @@ void GenBallQuads(void)
     }
 
     origin.x = BALLS_ORIGIN_X;
-    origin.y = BALLS_ORIGIN_Y + BALL_SIZE;
+    origin.y = (float)(BALLS_ORIGIN_Y + BALL_SIZE);
 
-    for (int i = 0; i < BALLS_AMOUNT_ROW_2; i++)
+    for (int i = 0; i < BALLS_IN_ROW_2; i++)
     {
         Rectangle ballRect;
         ballRect.x = origin.x;
@@ -119,7 +130,7 @@ void GenBallQuads(void)
         ballRect.width = (float)BALL_SIZE;
         ballRect.height = (float)BALL_SIZE;
 
-        ballQuads[i + BALLS_AMOUNT_ROW_1] = ballRect;
+        ballQuads[i + BALLS_IN_ROW_1] = ballRect;
         origin.x += (float)BALL_SIZE;
     }
 }
@@ -127,4 +138,36 @@ void GenBallQuads(void)
 Rectangle GetBallQuad(void)
 {
     return ballQuads[ball.skin];
+}
+
+void GenBrickQuads(void)
+{
+    int counter = 0, skin = 0;
+    Vector2 origin = {0, 0};
+    for (int i = 0; i < BRICK_ROWS; i++)
+    {
+        for (int j = 0; j < BRICK_COLS; j++)
+        {
+            Rectangle brick;
+            brick.x = origin.x;
+            brick.y = origin.y;
+            brick.width = (float)BRICK_WIDTH;
+            brick.height = (float)BRICK_HEIGHT;
+
+            brickQuads[counter] = brick;
+
+            counter++;
+            if (counter == BRICK_ARRAY_SIZE) { break; }
+
+            skin++;
+            skin %= BRICK_TIERS;
+            origin.x += (float)BRICK_WIDTH;
+        }
+        origin.y += (float)BRICK_HEIGHT;
+    }
+}
+
+Rectangle GetBrickQuad(const Brick *brick)
+{
+    return brickQuads[brick->color * BRICK_COLORS + brick->tier];
 }

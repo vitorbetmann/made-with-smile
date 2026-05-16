@@ -38,6 +38,7 @@ int main(void)
         draw();
     }
     unload();
+    return 0;
 }
 
 // —————————————————————————————————————————————————————————————————————————————————————————————————
@@ -89,6 +90,7 @@ void load(void)
 
     GenPaddleQuads();
     GenBallQuads();
+    GenBrickQuads();
 }
 
 void update(const float dt)
@@ -146,9 +148,11 @@ void unload(void)
     // entities
 
     // textures
+    UnloadRenderTexture(vWindow);
     tdUnloadAll();
 
     // fonts
+    UnloadFont(gFont);
 
     // sounds
     sdUnloadAll();

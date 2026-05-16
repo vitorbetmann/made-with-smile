@@ -11,26 +11,28 @@
 // Data types
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 
-typedef struct {
-  int id;
-  Sound sound;
-  UT_hash_handle hh;
+typedef struct
+{
+    int id;
+    Sound sound;
+    UT_hash_handle hh;
 } SoundDict;
 
-typedef enum {
-  PADDLE_HIT,
-  SCORE,
-  WALL_HIT,
-  CONFIRM,
-  SELECT,
-  NO_SELECT,
-  BRICK_HIT_1,
-  BRICK_HIT_2,
-  HURT,
-  VICTORY,
-  RECOVER,
-  HIGH_SCORE,
-  PAUSE,
+typedef enum
+{
+    PADDLE_HIT,
+    SCORE,
+    WALL_HIT,
+    CONFIRM,
+    SELECT,
+    NO_SELECT,
+    BRICK_HIT_1,
+    BRICK_HIT_2,
+    HURT,
+    VICTORY,
+    RECOVER,
+    HIGH_SCORE,
+    PAUSE,
 } SoundName;
 
 // —————————————————————————————————————————————————————————————————————————————————————————————————

@@ -2,15 +2,20 @@
 // Includes
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 
-#include "Ball.h"
+#include <raylib.h>
 
-#include "Constants.h"
+#include "Brick.h"
+
 #include "SoundDict.h"
 #include "TextureDict.h"
 #include "Util.h"
 
 // —————————————————————————————————————————————————————————————————————————————————————————————————
-// Data types
+// Defines
+// —————————————————————————————————————————————————————————————————————————————————————————————————
+
+// —————————————————————————————————————————————————————————————————————————————————————————————————
+// Data Types
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 
 // —————————————————————————————————————————————————————————————————————————————————————————————————
@@ -21,62 +26,49 @@
 // Variables
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 
-Ball ball;
-const int BALL_SIZE = 8;
+const int BRICK_WIDTH = 32;
+const int BRICK_HEIGHT = 16;
 
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 // Functions
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 
-void BallInit(const int skin)
+Brick *BrickInit(const int x, const int y)
 {
-    BallReset();
-    ball.skin = skin;
+    Brick *b = malloc(sizeof(Brick));
+    if (!b) { return nullptr; }
+
+    b->tier = 0;
+    b->color = 0;
+
+    b->x = x;
+    b->y = y;
+
+    b->inPlay = true;
+
+    return b;
 }
 
-void BallUpdate(const float dt)
+void BrickHit(Brick *brick)
 {
-    ball.x += ball.dx * dt;
-    ball.y += ball.dy * dt;
-
-    if (ball.x <= 0)
-    {
-        ball.x = 0;
-        ball.dx *= -1;
-        PlaySound(*sdFind(WALL_HIT));
-    }
-
-    if (ball.x >= (float)VIRTUAL_WIDTH - 8)
-    {
-        ball.x = (float)VIRTUAL_WIDTH - 8;
-        ball.dx *= -1;
-        PlaySound(*sdFind(WALL_HIT));
-    }
-
-    if (ball.y <= 0)
-    {
-        ball.y = 0;
-        ball.dy *= -1;
-        PlaySound(*sdFind(WALL_HIT));
-    }
+    PlaySound(*sdFind(BRICK_HIT_2));
+    brick->inPlay = false;
 }
 
-void BallDraw(void)
+void BrickDraw(const Brick *brick)
 {
-    const Rectangle dest = {ball.x, ball.y, (float)BALL_SIZE, (float)BALL_SIZE};
-    DrawTexturePro(*tdFind(MAIN), GetBallQuad(), dest, (Vector2){0}, 0, WHITE);
+    if (!brick->inPlay) { return; }
+
+    const Rectangle dest = BrickGetRect(brick);
+    DrawTexturePro(*tdFind(MAIN), GetBrickQuad(brick), dest, (Vector2){0}, 0, WHITE);
 }
 
-void BallReset(void)
+Rectangle BrickGetRect(const Brick *brick)
 {
-    ball.x = (float)(VIRTUAL_WIDTH - BALL_SIZE) / 2;
-    ball.y = (float)(VIRTUAL_HEIGHT - BALL_SIZE) / 2;
-
-    ball.dx = (float)GetRandomValue(-200, 200);
-    ball.dy = (float)GetRandomValue(-60, -50);
+    return (Rectangle){(float)brick->x, (float)brick->y, (float)BRICK_WIDTH, (float)BRICK_HEIGHT};
 }
 
-Rectangle BallGetRect(void)
+void BrickUnload(Brick *brick)
 {
-    return (Rectangle){ball.x, ball.y, (float)BALL_SIZE, (float)BALL_SIZE};
+    free(brick);
 }

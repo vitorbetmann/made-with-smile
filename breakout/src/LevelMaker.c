@@ -2,15 +2,20 @@
 // Includes
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 
-#include "Ball.h"
+#include "LevelMaker.h"
 
-#include "Constants.h"
-#include "SoundDict.h"
-#include "TextureDict.h"
-#include "Util.h"
+#include <stdlib.h>
+
+#include "Ball.h"
+#include "Brick.h"
+#include "raylib.h"
 
 // —————————————————————————————————————————————————————————————————————————————————————————————————
-// Data types
+// Defines
+// —————————————————————————————————————————————————————————————————————————————————————————————————
+
+// —————————————————————————————————————————————————————————————————————————————————————————————————
+// Data Types
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 
 // —————————————————————————————————————————————————————————————————————————————————————————————————
@@ -21,62 +26,60 @@
 // Variables
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 
-Ball ball;
-const int BALL_SIZE = 8;
+static Brick **bricks;
+static int rows, cols;
 
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 // Functions
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 
-void BallInit(const int skin)
+void LevelCreate(void)
 {
-    BallReset();
-    ball.skin = skin;
-}
+    rows = GetRandomValue(1, 5);
+    cols = GetRandomValue(7, 13);
 
-void BallUpdate(const float dt)
-{
-    ball.x += ball.dx * dt;
-    ball.y += ball.dy * dt;
 
-    if (ball.x <= 0)
+    bricks = malloc(rows * cols * sizeof(Brick *));
+    if (!bricks) { return; }
+
+    for (int i = 0; i < rows; i++)
     {
-        ball.x = 0;
-        ball.dx *= -1;
-        PlaySound(*sdFind(WALL_HIT));
-    }
-
-    if (ball.x >= (float)VIRTUAL_WIDTH - 8)
-    {
-        ball.x = (float)VIRTUAL_WIDTH - 8;
-        ball.dx *= -1;
-        PlaySound(*sdFind(WALL_HIT));
-    }
-
-    if (ball.y <= 0)
-    {
-        ball.y = 0;
-        ball.dy *= -1;
-        PlaySound(*sdFind(WALL_HIT));
+        for (int j = 0; j < cols; j++)
+        {
+            bricks[i * cols + j] = BrickInit(
+                j * BRICK_WIDTH + 8 + (13 - cols) * BRICK_WIDTH / 2,
+                i * BRICK_HEIGHT + 16);
+        }
     }
 }
 
-void BallDraw(void)
+void LevelDraw(void)
 {
-    const Rectangle dest = {ball.x, ball.y, (float)BALL_SIZE, (float)BALL_SIZE};
-    DrawTexturePro(*tdFind(MAIN), GetBallQuad(), dest, (Vector2){0}, 0, WHITE);
+    for (int i = 0; i < rows * cols; i++)
+    {
+        BrickDraw(bricks[i]);
+    }
 }
 
-void BallReset(void)
+void LevelUnload(void)
 {
-    ball.x = (float)(VIRTUAL_WIDTH - BALL_SIZE) / 2;
-    ball.y = (float)(VIRTUAL_HEIGHT - BALL_SIZE) / 2;
-
-    ball.dx = (float)GetRandomValue(-200, 200);
-    ball.dy = (float)GetRandomValue(-60, -50);
+    for (int i = 0; i < rows * cols; i++)
+    {
+        BrickUnload(bricks[i]);
+        bricks[i] = nullptr;
+    }
+    free(bricks);
+    bricks = nullptr;
 }
 
-Rectangle BallGetRect(void)
+void LevelCheckBrickCollision(void)
 {
-    return (Rectangle){ball.x, ball.y, (float)BALL_SIZE, (float)BALL_SIZE};
+    for (int i = 0; i < rows * cols; i++)
+    {
+        if (!bricks[i]->inPlay) { continue; }
+        if (CheckCollisionRecs(BallGetRect(), BrickGetRect(bricks[i])))
+        {
+            BrickHit(bricks[i]);
+        }
+    }
 }
