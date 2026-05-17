@@ -50,6 +50,17 @@ extern const int MAX_HEALTH;
 extern const int HEART_WIDTH;
 extern const int HEART_HEIGHT;
 
+// Score
+extern const int SCORE_COLOR;
+extern const int SCORE_TIER;
+
+// Bricks
+extern const int BRICK_WIDTH;
+extern const int BRICK_HEIGHT;
+
+extern const int TIER_THRESHOLD;
+extern const int COLOR_THRESHOLD;
+
 // Player
 extern int gHealth;
 extern int gScore;

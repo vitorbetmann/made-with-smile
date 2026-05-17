@@ -29,6 +29,17 @@ const int MAX_HEALTH = 3;
 const int HEART_WIDTH = 10;
 const int HEART_HEIGHT = 9;
 
+// Score
+const int SCORE_COLOR = 25;
+const int SCORE_TIER = 200;
+
+// Brick
+const int BRICK_WIDTH = 32;
+const int BRICK_HEIGHT = 16;
+
+const int TIER_THRESHOLD = 4;
+const int COLOR_THRESHOLD = 4;
+
 // Player
 int gHealth = MAX_HEALTH;
 int gScore = 0;

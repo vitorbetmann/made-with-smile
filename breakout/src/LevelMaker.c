@@ -10,7 +10,7 @@
 #include "Ball.h"
 #include "Brick.h"
 #include "raylib.h"
-#include "../../match-3/include/Constants.h"
+#include "Constants.h"
 
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 // Variables
@@ -20,8 +20,6 @@ static constexpr int ROWS_MIN = 1;
 static constexpr int ROWS_MAX = 5;
 static constexpr int COlS_MIN = 7;
 static constexpr int COlS_MAX = 13;
-
-static constexpr int TIER_THRESHOLD = 4;
 
 static Brick **bricks;
 static int rows, cols;
@@ -36,7 +34,7 @@ void LevelCreate(const int level)
     cols = GetRandomValue(COlS_MIN, COlS_MAX);
     cols += cols % 2 == 0 ? 1 : 0; // Make it odd for simmetry
 
-    const int highestTier = (int)fmin(3, (float)level / TIER_THRESHOLD);
+    const int highestTier = (int)fmin(3, (float)level / (float)TIER_THRESHOLD);
     const int highestColor = (int)fmin(4, level % 4 + 3);
 
     bricks = malloc(rows * cols * sizeof(Brick *));

@@ -63,7 +63,7 @@ void PlayUpdate(const float dt)
     const Brick *colBrick = LevelCheckBrickCollision();
     if (colBrick)
     {
-        gScore += 10;
+        gScore += colBrick->tier * SCORE_TIER + colBrick->color * SCORE_COLOR;
 
         // Centers of X and Y of brick
         const float centerBrickX = colBrick->x + (float)BRICK_WIDTH / 2;
