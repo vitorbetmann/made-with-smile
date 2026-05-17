@@ -34,6 +34,8 @@ typedef struct
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 
 void PaddleInit(void);
+void PaddleReset(void);
+bool IsPaddleInit(void);
 void PaddleUpdate(float dt);
 void PaddleDraw(void);
 Rectangle PaddleGetRect(void);

@@ -10,6 +10,7 @@
 
 #include "Ball.h"
 #include "Dependencies.h"
+#include "GameOver.h"
 #include "LevelMaker.h"
 #include "Paddle.h"
 
@@ -25,9 +26,6 @@ static bool isPaused;
 
 void PlayEnter(void *args)
 {
-    PaddleInit();
-    BallInit(0);
-    LevelCreate();
 }
 
 void PlayUpdate(const float dt)
@@ -69,6 +67,8 @@ void PlayUpdate(const float dt)
     const Brick *colBrick = LevelCheckBrickCollision();
     if (colBrick)
     {
+        gScore += 10;
+
         // Centers of X and Y of brick
         const float centerBrickX = colBrick->x + (float)BRICK_WIDTH / 2;
         const float centerBrickY = colBrick->y + (float)BRICK_HEIGHT / 2;
@@ -101,6 +101,26 @@ void PlayUpdate(const float dt)
 
         // Slightly scale the y velocity to speed up the game
         ball.dy *= 1.02f;
+        return;
+    }
+
+    if (ball.y > (float)VIRTUAL_HEIGHT)
+    {
+        gHealth--;
+        if (gHealth == 0)
+        {
+            if (!smSceneExists("game over"))
+            {
+                smCreateScene("game over", nullptr, GameOverUpdate, GameOverDraw, GameOverExit);
+            }
+            smSetScene("game over", nullptr);
+        }
+        else
+        {
+            smSetScene("serve", nullptr);
+        }
+
+        PlaySound(*sdFind(HURT));
     }
 }
 
@@ -117,10 +137,8 @@ void PlayDraw(void)
     const float textX = ((float)VIRTUAL_WIDTH - textSize.x) / 2.0f;
     DrawTextEx(gFont, "PAUSED", (Vector2){textX, (float)VIRTUAL_HEIGHT / 2 - 16},
                (float)LARGE_FONT, spacing, WHITE);
-
 }
 
 void PlayExit(void)
 {
-    LevelUnload();
 }

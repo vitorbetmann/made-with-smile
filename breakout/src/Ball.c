@@ -5,6 +5,7 @@
 #include "Ball.h"
 
 #include "Constants.h"
+#include "Paddle.h"
 #include "SoundDict.h"
 #include "TextureDict.h"
 #include "Util.h"
@@ -69,8 +70,8 @@ void BallDraw(void)
 
 void BallReset(void)
 {
-    ball.x = (float)(VIRTUAL_WIDTH - BALL_SIZE) / 2;
-    ball.y = (float)(VIRTUAL_HEIGHT - BALL_SIZE) / 2;
+    ball.x = paddle.x + (float)(paddle.width - BALL_SIZE) / 2;
+    ball.y = paddle.y - (float)BALL_SIZE;
 
     ball.dx = (float)GetRandomValue(-200, 200);
     ball.dy = (float)GetRandomValue(-60, -50);

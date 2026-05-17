@@ -8,14 +8,17 @@
 // Prototypes
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 
-void load(void);
+static void load(void);
 
-void update(float dt);
+static void update(float dt);
 
-void draw(void);
-void drawVWindow(void);
+static void draw(void);
+static void drawVWindow(void);
 
-void unload(void);
+static void drawHealth(void);
+static void drawScore(void);
+
+static void unload(void);
 
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 // Variables
@@ -84,12 +87,14 @@ void load(void)
 
     // SceneManager
     smStart();
-    smCreateScene("start", nullptr, StartUpdate, StartDraw, StartExit);
+    smCreateScene("start", nullptr, StartUpdate, StartDraw, nullptr);
     smSetScene("start", nullptr);
 
+    // Generate Quads
     GenPaddleQuads();
     GenBallQuads();
     GenBrickQuads();
+    GenHeartsQuads();
 }
 
 void update(const float dt)
@@ -133,6 +138,9 @@ void drawVWindow(void)
 
     smDraw();
 
+    drawHealth();
+    drawScore();
+
     // fps
     if (displayFPS)
     {
@@ -140,6 +148,32 @@ void drawVWindow(void)
     }
 
     EndTextureMode();
+}
+
+void drawHealth(void)
+{
+    Rectangle dest = {(float)VIRTUAL_WIDTH - 100, 4, (float)HEART_WIDTH, (float)HEART_HEIGHT};
+
+    for (int i = 0; i < gHealth; i++)
+    {
+        DrawTexturePro(*tdFind(HEARTS), GetHeartRect(FULL), dest, (Vector2){0, 0}, 0, WHITE);
+        dest.x += (float)HEART_WIDTH + 2;
+    }
+
+    // Empty hearts
+    for (int i = 0; i < MAX_HEALTH - gHealth; i++)
+    {
+        DrawTexturePro(*tdFind(HEARTS), GetHeartRect(EMPTY), dest, (Vector2){0, 0}, 0, WHITE);
+        dest.x += (float)HEART_WIDTH + 2;
+    }
+}
+
+void drawScore(void)
+{
+    const Vector2 origin = {(float)VIRTUAL_WIDTH - 60, 5};
+    char buffer[32];
+    snprintf(buffer, sizeof(buffer), "Score: %04d", gScore);
+    DrawTextEx(gFont, buffer, origin, SMALL_FONT, 0, WHITE);
 }
 
 void unload(void)

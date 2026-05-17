@@ -11,6 +11,7 @@
 #include "Play.h"
 
 #include "Constants.h"
+#include "Serve.h"
 #include "SoundDict.h"
 
 // —————————————————————————————————————————————————————————————————————————————————————————————————
@@ -54,11 +55,11 @@ void StartUpdate(float dt)
             //                   PaddleSelectDraw, PaddleSelectExit);
             // }
             // smSetScene("paddle select", nullptr);
-            if (!smSceneExists("play"))
+            if (!smSceneExists("serve"))
             {
-                smCreateScene("play", PlayEnter, PlayUpdate, PlayDraw, PlayExit);
+                smCreateScene("serve", ServeEnter, ServeUpdate, ServeDraw, nullptr);
             }
-            smSetScene("play", nullptr);
+            smSetScene("serve", nullptr);
             break;
         case 1:
             if (!smSceneExists("high score"))
@@ -95,9 +96,4 @@ void StartDraw(void)
     textX = ((float)VIRTUAL_WIDTH - textSize.x) / 2.0f;
     DrawTextEx(gFont, HIGH_SCORES_OPTION, (Vector2){textX, (float)VIRTUAL_HEIGHT / 2 + 90},
                (float)MEDIUM_FONT, spacing, currColor);
-}
-
-void StartExit(void)
-{
-    // TODO
 }

@@ -7,6 +7,7 @@
 #include <raylib.h>
 
 #include "Brick.h"
+#include "Constants.h"
 
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 // Prototypes
@@ -20,4 +21,7 @@ Rectangle GetBallQuad(void);
 
 void GenBrickQuads(void);
 Rectangle GetBrickQuad(const Brick *brick);
+
+void GenHeartsQuads(void);
+Rectangle GetHeartRect(HeartStatus status);
 

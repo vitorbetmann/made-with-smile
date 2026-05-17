@@ -19,6 +19,7 @@
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 
 void LevelCreate(void);
+bool IsLevelActive(void);
 void LevelDraw(void);
 Brick *LevelCheckBrickCollision(void);
 void LevelUnload(void);

@@ -44,6 +44,7 @@ static constexpr int HEART_ARRAY_SIZE = 2; // Full or empty
 static Rectangle paddleQuads[PADDLE_ARRAY_SIZE];
 static Rectangle ballQuads[BALL_ARRAY_SIZE];
 static Rectangle brickQuads[BRICK_ARRAY_SIZE];
+static Rectangle heartQuads[HEART_ARRAY_SIZE];
 
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 // Functions
@@ -170,4 +171,25 @@ void GenBrickQuads(void)
 Rectangle GetBrickQuad(const Brick *brick)
 {
     return brickQuads[brick->color * BRICK_COLORS + brick->tier];
+}
+
+void GenHeartsQuads(void)
+{
+    Vector2 origin = {0};
+    for (int i = 0; i < 2; i++)
+    {
+        Rectangle heart;
+        heart.x = origin.x;
+        heart.y = origin.y;
+        heart.width = (float)HEART_WIDTH;
+        heart.height = (float)HEART_HEIGHT;
+        heartQuads[i] = heart;
+
+        origin.x += (float)HEART_WIDTH;
+    }
+}
+
+Rectangle GetHeartRect(HeartStatus status)
+{
+    return heartQuads[status];
 }

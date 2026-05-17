@@ -4,9 +4,10 @@
 // Includes
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 
-#include <SceneManager.h>
+#include <stdio.h>
 #include <raylib.h>
 #include <uthash.h>
+#include <SceneManager.h>
 
 #include "Constants.h"
 #include "Util.h"

@@ -41,6 +41,11 @@ void LevelCreate(void)
     }
 }
 
+bool IsLevelActive(void)
+{
+    return bricks;
+}
+
 void LevelDraw(void)
 {
     for (int i = 0; i < rows * cols; i++)
@@ -51,6 +56,8 @@ void LevelDraw(void)
 
 void LevelUnload(void)
 {
+    if (!IsLevelActive()) { return; }
+    
     for (int i = 0; i < rows * cols; i++)
     {
         BrickUnload(bricks[i]);
