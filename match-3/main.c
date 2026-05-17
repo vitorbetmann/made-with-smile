@@ -74,6 +74,7 @@ void update(const float dt)
     // quit
     if (IsKeyPressed(KEY_ESCAPE))
     {
+        // smStop();
     }
 
     // toggle fps
@@ -126,6 +127,7 @@ void unload(void)
 
     // sounds
     sdUnloadAll();
+
     // music
     UnloadMusicStream(music);
 

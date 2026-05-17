@@ -4,15 +4,24 @@
 
 #include "LevelMaker.h"
 
+#include <math.h>
 #include <stdlib.h>
 
 #include "Ball.h"
 #include "Brick.h"
 #include "raylib.h"
+#include "../../match-3/include/Constants.h"
 
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 // Variables
 // —————————————————————————————————————————————————————————————————————————————————————————————————
+
+static constexpr int ROWS_MIN = 1;
+static constexpr int ROWS_MAX = 5;
+static constexpr int COlS_MIN = 7;
+static constexpr int COlS_MAX = 13;
+
+static constexpr int TIER_THRESHOLD = 4;
 
 static Brick **bricks;
 static int rows, cols;
@@ -21,23 +30,80 @@ static int rows, cols;
 // Functions
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 
-void LevelCreate(void)
+void LevelCreate(const int level)
 {
-    rows = GetRandomValue(1, 5);
-    cols = GetRandomValue(7, 13);
+    rows = GetRandomValue(ROWS_MIN, ROWS_MAX);
+    cols = GetRandomValue(COlS_MIN, COlS_MAX);
+    cols += cols % 2 == 0 ? 1 : 0; // Make it odd for simmetry
 
+    const int highestTier = (int)fmin(3, (float)level / TIER_THRESHOLD);
+    const int highestColor = (int)fmin(4, level % 4 + 3);
 
     bricks = malloc(rows * cols * sizeof(Brick *));
     if (!bricks) { return; }
 
+    const float startingX = (float)(VIRTUAL_WIDTH - cols * BRICK_WIDTH) / 2 - (float)BRICK_WIDTH;
+    Vector2 origin = {startingX, (float)BRICK_HEIGHT};
+
     for (int i = 0; i < rows; i++)
     {
+        // Whether to skip or alternate bricks for this row
+        const bool skipPattern = GetRandomValue(0, 1) == 0;
+        const bool alternatePattern = GetRandomValue(0, 1) == 0;
+
+        // Choose 2 colors/tiers to alternate between
+        const int color1 = GetRandomValue(0, highestColor);
+        const int color2 = GetRandomValue(0, highestColor);
+        const int tier1 = GetRandomValue(0, highestTier);
+        const int tier2 = GetRandomValue(0, highestTier);
+
+        // Flags to use when skipping/alternating a brick for the given pattern
+        bool skipFlag = GetRandomValue(0, 1) == 0;
+        bool alternateFlag = GetRandomValue(0, 1) == 0;
+
+        // Color to use if not alternating
+        const int solidColor = GetRandomValue(0, highestColor);
+        const int solidTier = GetRandomValue(0, highestTier);
+
         for (int j = 0; j < cols; j++)
         {
-            bricks[i * cols + j] = BrickInit(
-                j * BRICK_WIDTH + 8 + (13 - cols) * BRICK_WIDTH / 2,
-                i * BRICK_HEIGHT + 16);
+            origin.x += (float)BRICK_WIDTH;
+
+            skipFlag = !skipFlag;
+            if (skipPattern && skipFlag)
+            {
+                bricks[i * cols + j] = nullptr;
+                continue;
+            }
+
+            int tempColor, tempTier;
+            alternateFlag = !alternateFlag;
+            if (alternatePattern && alternateFlag)
+            {
+                tempColor = color1;
+                tempTier = tier1;
+            }
+            else
+            {
+                tempColor = color2;
+                tempTier = tier2;
+            }
+
+            if (!alternatePattern)
+            {
+                tempColor = solidColor;
+                tempTier = solidTier;
+            }
+
+            // bricks[i * cols + j] = BrickInit(
+            //     j * BRICK_WIDTH + 8 + (13 - cols) * BRICK_WIDTH / 2,
+            //     i * BRICK_HEIGHT + 16);
+
+            bricks[i * cols + j] = BrickInit(tempColor, tempTier, origin.x, origin.y);
+
         }
+        origin.x = startingX;
+        origin.y += (float)BRICK_HEIGHT;
     }
 }
 
@@ -50,6 +116,7 @@ void LevelDraw(void)
 {
     for (int i = 0; i < rows * cols; i++)
     {
+        if (!bricks[i]) { continue; }
         BrickDraw(bricks[i]);
     }
 }
@@ -57,7 +124,7 @@ void LevelDraw(void)
 void LevelUnload(void)
 {
     if (!IsLevelActive()) { return; }
-    
+
     for (int i = 0; i < rows * cols; i++)
     {
         BrickUnload(bricks[i]);
@@ -71,7 +138,9 @@ Brick *LevelCheckBrickCollision(void)
 {
     for (int i = 0; i < rows * cols; i++)
     {
+        if (!bricks[i]) { continue; }
         if (!bricks[i]->inPlay) { continue; }
+
         if (CheckCollisionRecs(BallGetRect(), BrickGetRect(bricks[i])))
         {
             BrickHit(bricks[i]);

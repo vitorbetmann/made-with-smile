@@ -5,14 +5,18 @@
 ## Featuring Smile's
 
 #### Modules:
+
 - SceneManager
 - ParticleSystem
 
 #### Tools:
+
 - GenScene
 
 ## External Libraries
+
 - [raylib](https://www.raylib.com)
+- [uthash](https://troydhanson.github.io/uthash/)
 
 ## Learning outcomes:
 

@@ -1,6 +1,6 @@
-# 🍬 Match 3 (Bejeweled/Candy Crush clone)
+# 🍬 Match 3 (Candy Crush clone)
 
-🕹️ [Play it on itch.io](https://vitorbetmann.itch.io/breakout)
+🕹️ [Play it on itch.io](https://vitorbetmann.itch.io/match-3)
 
 ## Featuring Smile's
 
@@ -15,6 +15,7 @@
 ## External Libraries
 
 - [raylib](https://www.raylib.com)
+- [uthash](https://troydhanson.github.io/uthash/)
 
 ## Learning outcomes:
 

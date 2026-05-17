@@ -33,13 +33,13 @@ const int BRICK_HEIGHT = 16;
 // Functions
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 
-Brick *BrickInit(const int x, const int y)
+Brick *BrickInit(const int color, const int tier, const float x, const float y)
 {
     Brick *b = malloc(sizeof(Brick));
     if (!b) { return nullptr; }
 
-    b->tier = 0;
-    b->color = 0;
+    b->color = color;
+    b->tier = tier;
 
     b->x = x;
     b->y = y;

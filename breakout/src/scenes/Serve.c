@@ -12,22 +12,6 @@
 #include "LevelMaker.h"
 #include "Play.h"
 
-
-// —————————————————————————————————————————————————————————————————————————————————————————————————
-// Defines
-// —————————————————————————————————————————————————————————————————————————————————————————————————
-
-
-// —————————————————————————————————————————————————————————————————————————————————————————————————
-// Data Types
-// —————————————————————————————————————————————————————————————————————————————————————————————————
-
-
-// —————————————————————————————————————————————————————————————————————————————————————————————————
-// Prototypes
-// —————————————————————————————————————————————————————————————————————————————————————————————————
-
-
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 // Variables
 // —————————————————————————————————————————————————————————————————————————————————————————————————
@@ -42,7 +26,7 @@ void ServeEnter(void *args)
 {
     if (!IsPaddleInit()) { PaddleInit(); }
     BallInit(GetRandomValue(0, 6));
-    if (!IsLevelActive()) { LevelCreate(); }
+    if (!IsLevelActive()) { LevelCreate(gLevel); }
 }
 
 void ServeUpdate(const float dt)
@@ -69,7 +53,7 @@ void ServeDraw(void)
 
     // Draw "Level [number]"
     char buffer[16];
-    snprintf(buffer, sizeof(buffer), "Level %d", 1);
+    snprintf(buffer, sizeof(buffer), "Level %d", gLevel);
     Vector2 textSize = MeasureTextEx(gFont, buffer, LARGE_FONT, 0);
     Vector2 textPos = {((float)VIRTUAL_WIDTH - textSize.x) / 2,
                        ((float)VIRTUAL_HEIGHT - textSize.y) / 2 - 30};

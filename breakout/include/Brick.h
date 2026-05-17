@@ -28,7 +28,7 @@ typedef struct
 // Prototypes
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 
-Brick *BrickInit(int x, int y);
+Brick *BrickInit(int color, int tier, float x, float y);
 void BrickHit(Brick *brick);
 void BrickDraw(const Brick *brick);
 Rectangle BrickGetRect(const Brick *brick);

@@ -32,3 +32,4 @@ const int HEART_HEIGHT = 9;
 // Player
 int gHealth = MAX_HEALTH;
 int gScore = 0;
+int gLevel = 1;

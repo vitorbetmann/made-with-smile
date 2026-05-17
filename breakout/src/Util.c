@@ -189,7 +189,7 @@ void GenHeartsQuads(void)
     }
 }
 
-Rectangle GetHeartRect(HeartStatus status)
+Rectangle GetHeartRect(const HeartStatus status)
 {
     return heartQuads[status];
 }

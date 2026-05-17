@@ -53,3 +53,4 @@ extern const int HEART_HEIGHT;
 // Player
 extern int gHealth;
 extern int gScore;
+extern int gLevel;

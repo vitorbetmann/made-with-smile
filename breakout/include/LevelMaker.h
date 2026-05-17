@@ -18,7 +18,7 @@
 // Prototypes
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 
-void LevelCreate(void);
+void LevelCreate(int level);
 bool IsLevelActive(void);
 void LevelDraw(void);
 Brick *LevelCheckBrickCollision(void);

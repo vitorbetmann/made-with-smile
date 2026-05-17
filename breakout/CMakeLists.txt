@@ -19,8 +19,8 @@ add_executable(breakout
         src/LevelMaker.c
         src/Brick.c
 
-        src/dicts/TextureDict.c
         src/dicts/SoundDict.c
+        src/dicts/TextureDict.c
 
         src/scenes/Start.c
         src/scenes/PaddleSelect.c
