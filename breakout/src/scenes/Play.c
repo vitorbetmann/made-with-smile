@@ -24,10 +24,6 @@ static bool isPaused;
 // Functions
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 
-void PlayEnter(void *args)
-{
-}
-
 void PlayUpdate(const float dt)
 {
     if (IsKeyPressed(KEY_SPACE))
@@ -137,8 +133,4 @@ void PlayDraw(void)
     const float textX = ((float)VIRTUAL_WIDTH - textSize.x) / 2.0f;
     DrawTextEx(gFont, "PAUSED", (Vector2){textX, (float)VIRTUAL_HEIGHT / 2 - 16},
                (float)LARGE_FONT, spacing, WHITE);
-}
-
-void PlayExit(void)
-{
 }

@@ -55,7 +55,7 @@ void ServeUpdate(const float dt)
     {
         if (!smSceneExists("play"))
         {
-            smCreateScene("play", PlayEnter, PlayUpdate, PlayDraw, PlayExit);
+            smCreateScene("play", nullptr, PlayUpdate, PlayDraw, nullptr);
         }
         smSetScene("play", nullptr);
     }
