@@ -5,6 +5,7 @@
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 
 #include <raylib.h>
+#include <ParticleSystem.h>
 
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 // Defines
@@ -22,6 +23,9 @@ typedef struct
     float x, y;
 
     bool inPlay;
+
+    ParticleSystem *ps;
+    Color particleColor;
 } Brick;
 
 // —————————————————————————————————————————————————————————————————————————————————————————————————
@@ -30,7 +34,9 @@ typedef struct
 
 Brick *BrickInit(int color, int tier, float x, float y);
 void BrickHit(Brick *brick);
+void BrickUpdate(const Brick *brick, float dt);
 void BrickDraw(const Brick *brick);
+void BrickDrawParticles(const Brick *brick);
 Rectangle BrickGetRect(const Brick *brick);
 void BrickUnload(Brick *brick);
 

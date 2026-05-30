@@ -18,8 +18,8 @@
 
 static constexpr int ROWS_MIN = 1;
 static constexpr int ROWS_MAX = 5;
-static constexpr int COlS_MIN = 7;
-static constexpr int COlS_MAX = 13;
+static constexpr int COLS_MIN = 7;
+static constexpr int COLS_MAX = 13;
 
 static Brick **bricks;
 static int rows, cols;
@@ -31,7 +31,7 @@ static int rows, cols;
 void LevelCreate(const int level)
 {
     rows = GetRandomValue(ROWS_MIN, ROWS_MAX);
-    cols = GetRandomValue(COlS_MIN, COlS_MAX);
+    cols = GetRandomValue(COLS_MIN, COLS_MAX);
     cols += cols % 2 == 0 ? 1 : 0; // Make it odd for simmetry
 
     const int highestTier = (int)fmin(3, (float)level / (float)TIER_THRESHOLD);
@@ -110,6 +110,15 @@ bool IsLevelActive(void)
     return bricks;
 }
 
+void LevelUpdate(const float dt)
+{
+    for (int i = 0; i < rows * cols; i++)
+    {
+        if (!bricks[i]) { continue; }
+        BrickUpdate(bricks[i], dt);
+    }
+}
+
 void LevelDraw(void)
 {
     for (int i = 0; i < rows * cols; i++)
@@ -119,12 +128,24 @@ void LevelDraw(void)
     }
 }
 
+void LevelDrawParticles(void)
+{
+    for (int i = 0; i < rows * cols; i++)
+    {
+        if (!bricks[i]) { continue; }
+
+        BrickDrawParticles(bricks[i]);
+    }
+}
+
 void LevelUnload(void)
 {
     if (!IsLevelActive()) { return; }
 
     for (int i = 0; i < rows * cols; i++)
     {
+        if (!bricks[i]) { continue; }
+
         BrickUnload(bricks[i]);
         bricks[i] = nullptr;
     }

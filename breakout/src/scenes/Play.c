@@ -57,7 +57,6 @@ void PlayUpdate(const float dt)
         }
 
         PlaySound(*sdFind(PADDLE_HIT));
-        return;
     }
 
     const Brick *colBrick = LevelCheckBrickCollision();
@@ -97,17 +96,16 @@ void PlayUpdate(const float dt)
 
         // Slightly scale the y velocity to speed up the game
         ball.dy *= 1.02f;
-        return;
     }
 
-    if (ball.y > (float)VIRTUAL_HEIGHT)
+    if (ball.y >= (float)VIRTUAL_HEIGHT)
     {
         gHealth--;
         if (gHealth == 0)
         {
             if (!smSceneExists("game over"))
             {
-                smCreateScene("game over", nullptr, GameOverUpdate, GameOverDraw, GameOverExit);
+                smAddScene("game over", nullptr, GameOverUpdate, GameOverDraw, GameOverExit);
             }
             smSetScene("game over", nullptr);
         }
@@ -118,12 +116,15 @@ void PlayUpdate(const float dt)
 
         PlaySound(*sdFind(HURT));
     }
+
+    LevelUpdate(dt);
 }
 
 void PlayDraw(void)
 {
     PaddleDraw();
     LevelDraw();
+    LevelDrawParticles();
     BallDraw();
 
     if (!isPaused) { return; }

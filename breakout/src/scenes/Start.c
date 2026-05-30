@@ -57,15 +57,15 @@ void StartUpdate(float dt)
             // smSetScene("paddle select", nullptr);
             if (!smSceneExists("serve"))
             {
-                smCreateScene("serve", ServeEnter, ServeUpdate, ServeDraw, nullptr);
+                smAddScene("serve", ServeEnter, ServeUpdate, ServeDraw, nullptr);
             }
             smSetScene("serve", nullptr);
             break;
         case 1:
             if (!smSceneExists("high score"))
             {
-                smCreateScene("high score", HighScoreEnter, HighScoreUpdate, HighScoreDraw,
-                              HighScoreExit);
+                smAddScene("high score", HighScoreEnter, HighScoreUpdate, HighScoreDraw,
+                           HighScoreExit);
             }
             smSetScene("high score", nullptr);
             break;
