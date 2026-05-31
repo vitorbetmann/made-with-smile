@@ -65,3 +65,6 @@ extern const int COLOR_THRESHOLD;
 extern int gHealth;
 extern int gScore;
 extern int gLevel;
+
+// Level Maker
+extern int gBricksActive;

@@ -44,3 +44,6 @@ const int COLOR_THRESHOLD = 4;
 int gHealth = MAX_HEALTH;
 int gScore = 0;
 int gLevel = 1;
+
+// Level Maker
+int gBricksActive = 0;

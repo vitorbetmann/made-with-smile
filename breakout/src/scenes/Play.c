@@ -12,7 +12,9 @@
 #include "Dependencies.h"
 #include "GameOver.h"
 #include "LevelMaker.h"
+#include "Log.h"
 #include "Paddle.h"
+#include "Victory.h"
 
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 // Variables
@@ -62,6 +64,17 @@ void PlayUpdate(const float dt)
     const Brick *colBrick = LevelCheckBrickCollision();
     if (colBrick)
     {
+        // Check game over
+        if (!colBrick->inPlay && --gBricksActive == 0)
+        {
+            if (!smSceneExists("victory"))
+            {
+                smAddScene("victory", VictoryEnter, VictoryUpdate, VictoryDraw, VictoryExit);
+            }
+            smSetScene("victory", nullptr);
+            return;
+        }
+
         gScore += colBrick->tier * SCORE_TIER + colBrick->color * SCORE_COLOR;
 
         // Centers of X and Y of brick

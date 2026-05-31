@@ -32,7 +32,7 @@ void LevelCreate(const int level)
 {
     rows = GetRandomValue(ROWS_MIN, ROWS_MAX);
     cols = GetRandomValue(COLS_MIN, COLS_MAX);
-    cols += cols % 2 == 0 ? 1 : 0; // Make it odd for simmetry
+    cols += cols % 2 == 0 ? 1 : 0; // Make it odd for style
 
     const int highestTier = (int)fmin(3, (float)level / (float)TIER_THRESHOLD);
     const int highestColor = (int)fmin(4, level % 4 + 3);
@@ -93,12 +93,8 @@ void LevelCreate(const int level)
                 tempTier = solidTier;
             }
 
-            // bricks[i * cols + j] = BrickInit(
-            //     j * BRICK_WIDTH + 8 + (13 - cols) * BRICK_WIDTH / 2,
-            //     i * BRICK_HEIGHT + 16);
-
             bricks[i * cols + j] = BrickInit(tempColor, tempTier, origin.x, origin.y);
-
+            gBricksActive++;
         }
         origin.x = startingX;
         origin.y += (float)BRICK_HEIGHT;
