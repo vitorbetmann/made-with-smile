@@ -44,7 +44,7 @@ void VictoryDraw(void)
     char buffer[32];
     snprintf(buffer, sizeof(buffer), LEVEL_COMPLETE_TEXT, gLevel);
     Vector2 textSize = MeasureTextEx(gFont, buffer, MEDIUM_FONT, 0);
-    Vector2 textPos = {0};
+    Vector2 textPos;
     textPos.x = ((float)VIRTUAL_WIDTH - textSize.x) / 2;
     textPos.y = (float)VIRTUAL_HEIGHT / 2;
     DrawTextEx(gFont, buffer, textPos, MEDIUM_FONT, 0, WHITE);

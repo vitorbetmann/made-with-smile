@@ -25,6 +25,13 @@ typedef enum
     EMPTY
 } HeartStatus;
 
+// High Scores
+typedef struct
+{
+    char name[4];
+    char score[32];
+} ScoreData;
+
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 // Variables
 // —————————————————————————————————————————————————————————————————————————————————————————————————
@@ -68,3 +75,7 @@ extern int gLevel;
 
 // Level Maker
 extern int gBricksActive;
+
+// High Scores
+extern ScoreData gHighScores[10];
+extern char SAVE_FILE[];

@@ -25,3 +25,4 @@ Rectangle GetBrickQuad(const Brick *brick);
 void GenHeartsQuads(void);
 Rectangle GetHeartRect(HeartStatus status);
 
+void LoadHighScores(void);

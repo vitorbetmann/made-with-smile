@@ -47,3 +47,7 @@ int gLevel = 1;
 
 // Level Maker
 int gBricksActive = 0;
+
+// High Scored
+ScoreData gHighScores[10];
+char SAVE_FILE[] = "highscores.lst";

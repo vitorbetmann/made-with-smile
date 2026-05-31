@@ -2,6 +2,9 @@
 // Includes
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 
+#include <stdio.h>
+#include <string.h>
+
 #include "Util.h"
 
 #include "Ball.h"
@@ -192,4 +195,33 @@ void GenHeartsQuads(void)
 Rectangle GetHeartRect(const HeartStatus status)
 {
     return heartQuads[status];
+}
+
+void LoadHighScores(void)
+{
+    FILE *file = fopen(SAVE_FILE, "r");
+    char c;
+    int i = 0, len = 0, line = 0;;
+    char buf[32];
+    while (fread(&c, sizeof(char), 1, file))
+    {
+        buf[len++] = c;
+        if (c == '\n')
+        {
+            buf[len - 1] = '\0';
+            if (line % 2 == 0)
+            {
+                strcpy(gHighScores[i].name, buf);
+            }
+            else
+            {
+                strcpy(gHighScores[i].score, buf);
+            }
+            buf[0] = '\0';
+            len = 0;
+            line++;
+            i = line / 2;
+        }
+    }
+    fclose(file);
 }

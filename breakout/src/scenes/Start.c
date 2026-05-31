@@ -64,8 +64,7 @@ void StartUpdate(float dt)
         case 1:
             if (!smSceneExists("high score"))
             {
-                smAddScene("high score", HighScoreEnter, HighScoreUpdate, HighScoreDraw,
-                           HighScoreExit);
+                smAddScene("high score", HighScoreEnter, HighScoreUpdate, HighScoreDraw, nullptr);
             }
             smSetScene("high score", nullptr);
             break;
