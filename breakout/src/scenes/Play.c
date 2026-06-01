@@ -74,7 +74,6 @@ void PlayUpdate(const float dt)
             {
                 smAddScene("victory", VictoryEnter, VictoryUpdate, VictoryDraw, VictoryExit);
             }
-            PlaySound(*sdFind(VICTORY));
             smSetScene("victory", nullptr);
             return;
         }

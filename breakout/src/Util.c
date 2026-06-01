@@ -7,11 +7,10 @@
 
 #include "Util.h"
 
-#include <stdlib.h>
-
 #include "Ball.h"
 #include "Brick.h"
 #include "Paddle.h"
+#include "TextureDict.h"
 
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 // Variables
@@ -44,12 +43,14 @@ static constexpr int PADDLE_ARRAY_SIZE = PADDLE_SIZES * PADDLE_COLORS;
 static constexpr int BALL_ARRAY_SIZE = BALLS_IN_ROW_1 + BALLS_IN_ROW_2;
 static constexpr int BRICK_ARRAY_SIZE = BRICK_COLORS * BRICK_TIERS + BRICK_SPECIAL;
 static constexpr int HEART_ARRAY_SIZE = 2; // Full or empty
+static constexpr int ARROW_ARRAY_SIZE = 2; // Left or right
 
 // Quad arrays declaration
 static Rectangle paddleQuads[PADDLE_ARRAY_SIZE];
 static Rectangle ballQuads[BALL_ARRAY_SIZE];
 static Rectangle brickQuads[BRICK_ARRAY_SIZE];
 static Rectangle heartQuads[HEART_ARRAY_SIZE];
+static Rectangle arrowQuads[ARROW_ARRAY_SIZE];
 
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 // Functions
@@ -181,7 +182,7 @@ Rectangle GetBrickQuad(const Brick *brick)
 void GenHeartsQuads(void)
 {
     Vector2 origin = {0};
-    for (int i = 0; i < 2; i++)
+    for (int i = 0; i < HEART_ARRAY_SIZE; i++)
     {
         Rectangle heart;
         heart.x = origin.x;
@@ -197,6 +198,28 @@ void GenHeartsQuads(void)
 Rectangle GetHeartRect(const HeartStatus status)
 {
     return heartQuads[status];
+}
+
+void GenArrowQuads(void)
+{
+    Vector2 origin = {0};
+    const Texture arrowTexture = *tdFind(ARROWS);
+    for (int i = 0; i < ARROW_ARRAY_SIZE; i++)
+    {
+        Rectangle arrowRect;
+        arrowRect.x = origin.x;
+        arrowRect.y = origin.y;
+        arrowRect.width = (float)arrowTexture.width / 2;
+        arrowRect.height = (float)arrowTexture.height;
+        arrowQuads[i] = arrowRect;
+
+        origin.x += (float)arrowTexture.width / 2;
+    }
+}
+
+Rectangle GetArrowRect(const ArrowOrientation orientation)
+{
+    return arrowQuads[orientation];
 }
 
 void LoadHighScores(void)

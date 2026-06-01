@@ -21,7 +21,6 @@
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 
 static constexpr int PADDLE_SPEED = 200;
-static bool isInit;
 
 Paddle paddle;
 
@@ -36,20 +35,13 @@ void PaddleInit(void)
     paddle.width = 64;
     paddle.height = 16;
     paddle.size = 2;
-    paddle.skin = 1;
-
-    isInit = true;
+    if (paddle.skin == 0) { paddle.skin = 1; }
 }
 
 void PaddleReset(void)
 {
     paddle.x = (float)VIRTUAL_WIDTH / 2 - 32;
     paddle.y = (float)VIRTUAL_HEIGHT - 32;
-}
-
-bool IsPaddleInit(void)
-{
-    return isInit;
 }
 
 void PaddleUpdate(const float dt)

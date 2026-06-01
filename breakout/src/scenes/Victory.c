@@ -11,6 +11,7 @@
 #include "Constants.h"
 #include "LevelMaker.h"
 #include "Paddle.h"
+#include "SoundDict.h"
 
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 // Variables
@@ -25,7 +26,7 @@ constexpr char SERVE_TEXT[] = "Press Enter to serve!";
 
 void VictoryEnter(void *args)
 {
-    // TODO
+    PlaySound(*sdFind(VICTORY));
 }
 
 void VictoryUpdate(float dt)

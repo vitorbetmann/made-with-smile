@@ -23,7 +23,7 @@
 static constexpr char CONFIRM_TEXT[] = "Press Enter to continue";
 static int scoreIndex;
 static int highlightChar = 0;
-static char name[4] = "AAA";
+static char name[4];
 
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 // Functions
@@ -31,8 +31,14 @@ static char name[4] = "AAA";
 
 void EnterHighScoreEnter(void *args)
 {
+    PlaySound(*sdFind(HIGH_SCORE));
+    for (int i = 0; i < 3; i++)
+    {
+        name[i] = 'A';
+    }
+    name[3] = '\0';
+
     highlightChar = 0;
-    if (!args) { return; }
     scoreIndex = ((GameOverData *)args)->scoreIndex;
 }
 

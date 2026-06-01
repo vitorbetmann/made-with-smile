@@ -24,7 +24,6 @@ constexpr char PLAY_PROMPT[] = "Press Enter to serve!";
 
 void ServeEnter(void *args)
 {
-    if (!IsPaddleInit()) { PaddleInit(); }
     BallInit(GetRandomValue(0, 6));
     if (!IsLevelActive()) { LevelCreate(gLevel); }
 }

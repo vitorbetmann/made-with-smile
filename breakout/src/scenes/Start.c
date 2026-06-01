@@ -11,10 +11,8 @@
 
 #include "PaddleSelect.h"
 #include "HighScore.h"
-#include "Play.h"
 
 #include "Constants.h"
-#include "Serve.h"
 #include "SoundDict.h"
 #include "Util.h"
 
@@ -36,7 +34,7 @@ static int highlightedOption;
 void StartEnter(void *args)
 {
     gScore = 0;
-    gLevel = 0;
+    gLevel = 1;
     if (!FileExists(SAVE_FILE))
     {
         FILE *file = fopen(SAVE_FILE, "w");
@@ -66,17 +64,12 @@ void StartUpdate(float dt)
         switch (highlightedOption)
         {
         case 0:
-            // if (!smSceneExists("paddle select"))
-            // {
-            //     smCreateScene("paddle select", PaddleSelectEnter, PaddleSelectUpdate,
-            //                   PaddleSelectDraw, PaddleSelectExit);
-            // }
-            // smSetScene("paddle select", nullptr);
-            if (!smSceneExists("serve"))
+            if (!smSceneExists("paddle select"))
             {
-                smAddScene("serve", ServeEnter, ServeUpdate, ServeDraw, nullptr);
+                smAddScene("paddle select", PaddleSelectEnter, PaddleSelectUpdate, PaddleSelectDraw,
+                           nullptr);
             }
-            smSetScene("serve", nullptr);
+            smSetScene("paddle select", nullptr);
             break;
         case 1:
             if (!smSceneExists("high score"))
