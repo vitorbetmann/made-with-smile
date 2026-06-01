@@ -6,6 +6,9 @@
 #include <SceneManager.h>
 
 #include "Start.h"
+
+#include <stdio.h>
+
 #include "PaddleSelect.h"
 #include "HighScore.h"
 #include "Play.h"
@@ -13,6 +16,7 @@
 #include "Constants.h"
 #include "Serve.h"
 #include "SoundDict.h"
+#include "Util.h"
 
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 // Variables
@@ -28,6 +32,19 @@ static int highlightedOption;
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 // Functions
 // —————————————————————————————————————————————————————————————————————————————————————————————————
+
+void StartEnter(void *args)
+{
+    gScore = 0;
+    gLevel = 0;
+    if (!FileExists(SAVE_FILE))
+    {
+        FILE *file = fopen(SAVE_FILE, "w");
+        fclose(file);
+    }
+
+    LoadHighScores();
+}
 
 void StartUpdate(float dt)
 {
@@ -64,7 +81,7 @@ void StartUpdate(float dt)
         case 1:
             if (!smSceneExists("high score"))
             {
-                smAddScene("high score", HighScoreEnter, HighScoreUpdate, HighScoreDraw, nullptr);
+                smAddScene("high score", nullptr, HighScoreUpdate, HighScoreDraw, nullptr);
             }
             smSetScene("high score", nullptr);
             break;

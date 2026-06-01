@@ -7,6 +7,8 @@
 
 #include "Util.h"
 
+#include <stdlib.h>
+
 #include "Ball.h"
 #include "Brick.h"
 #include "Paddle.h"
@@ -223,5 +225,22 @@ void LoadHighScores(void)
             i = line / 2;
         }
     }
+    fclose(file);
+}
+
+void SaveHighScores(void)
+{
+    FILE *file = fopen(SAVE_FILE, "w");
+    fclose(file);
+    file = fopen(SAVE_FILE, "a");
+
+    int i = 0;
+
+    while (i < 10 && strlen(gHighScores[i].score) != 0)
+    {
+        fprintf(file, "%s\n%s\n", gHighScores[i].name, gHighScores[i].score);
+        i++;
+    }
+
     fclose(file);
 }

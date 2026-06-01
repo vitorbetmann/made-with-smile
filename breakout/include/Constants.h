@@ -79,3 +79,4 @@ extern int gBricksActive;
 // High Scores
 extern ScoreData gHighScores[10];
 extern char SAVE_FILE[];
+extern const int MAX_NAME_LENGTH;

@@ -1,6 +1,4 @@
-#ifndef ENTERHIGHSCORE_H
-#define ENTERHIGHSCORE_H
-
+#pragma once
 
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 // Includes
@@ -28,11 +26,3 @@ void EnterHighScoreUpdate(float dt);
 void EnterHighScoreDraw(void);
 
 void EnterHighScoreExit(void);
-
-
-// —————————————————————————————————————————————————————————————————————————————————————————————————
-// Variables
-// —————————————————————————————————————————————————————————————————————————————————————————————————
-
-
-#endif

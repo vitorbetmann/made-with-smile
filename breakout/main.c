@@ -87,7 +87,7 @@ void load(void)
 
     // SceneManager
     smStart();
-    smAddScene("start", nullptr, StartUpdate, StartDraw, nullptr);
+    smAddScene("start", StartEnter, StartUpdate, StartDraw, nullptr);
     smSetScene("start", nullptr);
 
     // Generate Quads

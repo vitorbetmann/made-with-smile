@@ -61,9 +61,12 @@ void PlayUpdate(const float dt)
         PlaySound(*sdFind(PADDLE_HIT));
     }
 
-    const Brick *colBrick = LevelCheckBrickCollision();
+    Brick *colBrick = LevelCheckBrickCollision();
     if (colBrick)
     {
+        gScore += colBrick->tier * SCORE_TIER + colBrick->color * SCORE_COLOR;
+        BrickHit(colBrick);
+
         // Check game over
         if (!colBrick->inPlay && --gBricksActive == 0)
         {
@@ -71,11 +74,10 @@ void PlayUpdate(const float dt)
             {
                 smAddScene("victory", VictoryEnter, VictoryUpdate, VictoryDraw, VictoryExit);
             }
+            PlaySound(*sdFind(VICTORY));
             smSetScene("victory", nullptr);
             return;
         }
-
-        gScore += colBrick->tier * SCORE_TIER + colBrick->color * SCORE_COLOR;
 
         // Centers of X and Y of brick
         const float centerBrickX = colBrick->x + (float)BRICK_WIDTH / 2;

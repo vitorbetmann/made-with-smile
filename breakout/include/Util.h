@@ -26,3 +26,4 @@ void GenHeartsQuads(void);
 Rectangle GetHeartRect(HeartStatus status);
 
 void LoadHighScores(void);
+void SaveHighScores(void);

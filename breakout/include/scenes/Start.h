@@ -21,6 +21,8 @@
 // Prototypes
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 
+void StartEnter(void *args);
+
 void StartUpdate(float dt);
 
 void StartDraw(void);

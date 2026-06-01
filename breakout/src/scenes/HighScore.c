@@ -26,20 +26,6 @@ static constexpr char RETURN_TEXT[] = "Press Enter to return to the main menu";
 // Functions
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 
-void HighScoreEnter(void *args)
-{
-    if (!FileExists(SAVE_FILE))
-    {
-        FILE *file = fopen(SAVE_FILE, "w");
-        fclose(file);
-    }
-
-    if (strlen(gHighScores[0].name) == 0)
-    {
-        LoadHighScores();
-    }
-}
-
 void HighScoreUpdate(float dt)
 {
     if (IsKeyPressed(KEY_ENTER))

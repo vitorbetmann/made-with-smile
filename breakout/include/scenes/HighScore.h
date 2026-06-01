@@ -21,8 +21,6 @@
 // Prototypes
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 
-void HighScoreEnter(void *args);
-
 void HighScoreUpdate(float dt);
 
 void HighScoreDraw(void);

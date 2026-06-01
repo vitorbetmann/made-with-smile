@@ -158,7 +158,6 @@ Brick *LevelCheckBrickCollision(void)
 
         if (CheckCollisionRecs(BallGetRect(), BrickGetRect(bricks[i])))
         {
-            BrickHit(bricks[i]);
             // Only allow colliding with one brick, for corners
             return bricks[i];
         }

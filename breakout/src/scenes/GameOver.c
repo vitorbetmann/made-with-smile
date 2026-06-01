@@ -2,6 +2,7 @@
 // Includes
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 
+#include <stdlib.h>
 #include <stdio.h>
 #include <raylib.h>
 #include <SceneManager.h>
@@ -9,23 +10,10 @@
 #include "GameOver.h"
 
 #include "Constants.h"
+#include "EnterHighScore.h"
+#include "HighScore.h"
 #include "LevelMaker.h"
 #include "Paddle.h"
-
-// —————————————————————————————————————————————————————————————————————————————————————————————————
-// Defines
-// —————————————————————————————————————————————————————————————————————————————————————————————————
-
-
-// —————————————————————————————————————————————————————————————————————————————————————————————————
-// Data Types
-// —————————————————————————————————————————————————————————————————————————————————————————————————
-
-
-// —————————————————————————————————————————————————————————————————————————————————————————————————
-// Prototypes
-// —————————————————————————————————————————————————————————————————————————————————————————————————
-
 
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 // Variables
@@ -35,16 +23,41 @@ constexpr char GAME_OVER_TEXT[] = "GAME OVER";
 constexpr char FINAL_SCORE_TEXT[] = "Final Score:";
 constexpr char CONTINUE_TEXT[] = "Press Enter to continue!";
 
+static int scoreIndex;
+
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 // Functions
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 
 void GameOverUpdate(float dt)
 {
-    if (IsKeyPressed(KEY_ENTER))
+    if (!IsKeyPressed(KEY_ENTER)) { return; }
+
+    bool highScore = false;
+    scoreIndex = 10;
+
+    for (int i = 9; i >= 0; i--)
     {
-        smSetScene("start", NULL);
+        void *endptr = nullptr;
+        const int currHighScore = (int)strtol(gHighScores[i].score, endptr, 10);
+        if (gScore <= currHighScore)
+            break;
+        scoreIndex--;
+        highScore = true;
     }
+
+    if (highScore)
+    {
+        if (!smSceneExists("enter high score"))
+        {
+            smAddScene("enter high score", EnterHighScoreEnter, EnterHighScoreUpdate,
+                       EnterHighScoreDraw, EnterHighScoreExit);
+        }
+        smSetScene("enter high score", &(GameOverData){scoreIndex});
+        return;
+    }
+
+    smSetScene("start", nullptr);
 }
 
 void GameOverDraw(void)
@@ -71,5 +84,4 @@ void GameOverExit(void)
     LevelUnload();
     PaddleReset();
     gHealth = MAX_HEALTH;
-    gScore = 0;
 }

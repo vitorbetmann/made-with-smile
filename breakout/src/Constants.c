@@ -49,5 +49,6 @@ int gLevel = 1;
 int gBricksActive = 0;
 
 // High Scored
-ScoreData gHighScores[10];
+ScoreData gHighScores[10] = {0};
 char SAVE_FILE[] = "highscores.lst";
+const int MAX_NAME_LENGTH = 3;
