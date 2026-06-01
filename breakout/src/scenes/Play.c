@@ -64,7 +64,7 @@ void PlayUpdate(const float dt)
     Brick *colBrick = LevelCheckBrickCollision();
     if (colBrick)
     {
-        gScore += colBrick->tier * SCORE_TIER + colBrick->color * SCORE_COLOR;
+        gScore += (colBrick->tier + 1) * SCORE_TIER + (colBrick->color + 1) * SCORE_COLOR;
         BrickHit(colBrick);
 
         // Check game over

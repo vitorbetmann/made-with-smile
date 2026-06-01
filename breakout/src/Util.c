@@ -153,6 +153,7 @@ void GenBrickQuads(void)
     Vector2 origin = {0, 0};
     for (int i = 0; i < BRICK_ROWS; i++)
     {
+        origin.x = 0;
         for (int j = 0; j < BRICK_COLS; j++)
         {
             Rectangle brick;

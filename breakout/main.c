@@ -4,6 +4,10 @@
 
 #include "Dependencies.h"
 
+#if defined(PLATFORM_WEB)
+#include <emscripten/emscripten.h>
+#endif
+
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 // Prototypes
 // —————————————————————————————————————————————————————————————————————————————————————————————————
@@ -11,6 +15,8 @@
 static void load(void);
 
 static void update(float dt);
+
+static void updateDraw(void);
 
 static void draw(void);
 static void drawVWindow(void);
@@ -35,12 +41,16 @@ static Music music;
 int main(void)
 {
     load();
+#if defined(PLATFORM_WEB)
+    emscripten_set_main_loop(updateDraw, 0, 1);
+#else
     while (smIsRunning())
     {
         update(smGetDt());
         draw();
     }
     unload();
+#endif
 }
 
 // —————————————————————————————————————————————————————————————————————————————————————————————————
@@ -114,6 +124,12 @@ void update(const float dt)
     {
         displayFPS = !displayFPS;
     }
+}
+
+void updateDraw(void)
+{
+    update(smGetDt());
+    draw();
 }
 
 void draw(void)
