@@ -37,98 +37,129 @@ void PlayUpdate(const float dt)
     if (isPaused) { return; }
 
     PaddleUpdate(dt);
-    BallUpdate(dt);
-
-    if (CheckCollisionRecs(BallGetRect(), PaddleGetRect()))
+    const int powerUpCollision = PowerUpCheckPaddleCollision();
+    if (powerUpCollision != -1)
     {
-        ball.y = paddle.y - (float)BALL_SIZE;
-        ball.dy *= -1;
-
-        const bool isPaddleMovingLeft = paddle.dx < 0;
-        const bool isPaddleMovingRight = paddle.dx > 0;
-        const float paddleCenter = paddle.x + (float)paddle.width / 2;
-        const float ballOffset = fabsf(ball.x - paddleCenter);
-
-        if (ball.x < paddleCenter && isPaddleMovingLeft)
-        {
-            ball.dx = (float)-STARTING_BOUNCE_DX - (float)BOUNCE_ANGLE_MULTIPLIER * ballOffset;
-        }
-        else if (ball.x > paddleCenter && isPaddleMovingRight)
-        {
-            ball.dx = (float)STARTING_BOUNCE_DX + (float)BOUNCE_ANGLE_MULTIPLIER * ballOffset;
-        }
-
-        PlaySound(*sdFind(PADDLE_HIT));
+        PowerUpTrigger(powerUpCollision);
     }
 
-    Brick *colBrick = LevelCheckBrickCollision();
-    if (colBrick)
+    int i = 0;
+    while (i < gActiveBalls)
     {
-        gScore += (colBrick->tier + 1) * SCORE_TIER + (colBrick->color + 1) * SCORE_COLOR;
-        BrickHit(colBrick);
+        bool ballDied = false;
+        BallUpdate(&balls[i], dt);
 
-        // Check game over
-        if (!colBrick->inPlay && --gBricksActive == 0)
+        if (CheckCollisionRecs(BallGetRect(&balls[i]), PaddleGetRect()))
         {
-            if (!smSceneExists("victory"))
+            balls[i].y = paddle.y - (float)BALL_SIZE;
+            balls[i].dy *= -1;
+
+            const bool isPaddleMovingLeft = paddle.dx < 0;
+            const bool isPaddleMovingRight = paddle.dx > 0;
+            const float paddleCenter = paddle.x + (float)paddle.width / 2;
+            const float ballOffset = fabsf(balls[i].x - paddleCenter);
+
+            if (balls[i].x < paddleCenter && isPaddleMovingLeft)
             {
-                smAddScene("victory", VictoryEnter, VictoryUpdate, VictoryDraw, VictoryExit);
+                balls[i].dx = (float)-STARTING_BOUNCE_DX - (float)BOUNCE_ANGLE_MULTIPLIER *
+                              ballOffset;
             }
-            smSetScene("victory", nullptr);
+            else if (balls[i].x > paddleCenter && isPaddleMovingRight)
+            {
+                balls[i].dx = (float)STARTING_BOUNCE_DX + (float)BOUNCE_ANGLE_MULTIPLIER *
+                              ballOffset;
+            }
+
+            PlaySound(*sdFind(PADDLE_HIT));
+        }
+
+        Brick *colBrick = LevelCheckBrickCollision(&balls[i]);
+        if (colBrick)
+        {
+            gScore += (colBrick->tier + 1) * SCORE_TIER + (colBrick->color + 1) * SCORE_COLOR;
+            BrickHit(colBrick);
+
+            // Check game over
+            if (!colBrick->inPlay && --gBricksActive == 0)
+            {
+                if (!smSceneExists("victory"))
+                {
+                    smAddScene("victory", VictoryEnter, VictoryUpdate, VictoryDraw, VictoryExit);
+                }
+                smSetScene("victory", nullptr);
+                return;
+            }
+
+            // Centers of X and Y of brick
+            const float centerBrickX = colBrick->x + (float)BRICK_WIDTH / 2;
+            const float centerBrickY = colBrick->y + (float)BRICK_HEIGHT / 2;
+
+            // Centers of X and Y of ball
+            const float centerBallX = balls[i].x + (float)BALL_SIZE / 2;
+            const float centerBallY = balls[i].y + (float)BALL_SIZE / 2;
+
+            // Signed collision offsets between brick and ball
+            const float offsetX = centerBrickX - centerBallX;
+            const float offsetY = centerBrickY - centerBallY;
+
+            // Penetration depth of the ball on X and Y;
+            // Add half-extents of brick and ball, then subtract
+            // amount of overlap on that axis; the higher penetration
+            // depth is the prioritized collision and axis of bounce
+            const float penX = (float)(BRICK_WIDTH + BALL_SIZE) / 2 - fabsf(offsetX);
+            const float penY = (float)(BRICK_HEIGHT + BALL_SIZE) / 2 - fabsf(offsetY);
+
+            if (penX < penY)
+            {
+                balls[i].dx *= -1;
+                balls[i].x += offsetX > 0 ? -penX : penX;
+            }
+            else
+            {
+                balls[i].dy *= -1;
+                balls[i].y += offsetY > 0 ? -penY : penY;
+            }
+
+            // Slightly scale the y velocity to speed up the game
+            balls[i].dy *= 1.02f;
+
+            // Randomly spawn power ups
+            if (gScore > 100 && gScore % 100 == 0)
+            {
+                PowerUpActivate(SPAWN_BALLS, colBrick->x, colBrick->y);
+            }
+        }
+
+        if (balls[i].y >= (float)VIRTUAL_HEIGHT)
+        {
+            const Ball temp = balls[i];
+            balls[i] = balls[gActiveBalls - 1];
+            balls[gActiveBalls - 1] = temp;
+            gActiveBalls--;
+            ballDied = true;
+            PlaySound(*sdFind(HURT));
+        }
+
+        if (gActiveBalls == 0)
+        {
+            gHealth--;
+            if (gHealth == 0)
+            {
+                if (!smSceneExists("game over"))
+                {
+                    smAddScene("game over", nullptr, GameOverUpdate, GameOverDraw, GameOverExit);
+                }
+                smSetScene("game over", nullptr);
+            }
+            else
+            {
+                smSetScene("serve", nullptr);
+            }
+
             return;
         }
 
-        // Centers of X and Y of brick
-        const float centerBrickX = colBrick->x + (float)BRICK_WIDTH / 2;
-        const float centerBrickY = colBrick->y + (float)BRICK_HEIGHT / 2;
-
-        // Centers of X and Y of ball
-        const float centerBallX = ball.x + (float)BALL_SIZE / 2;
-        const float centerBallY = ball.y + (float)BALL_SIZE / 2;
-
-        // Signed collision offsets between brick and ball
-        const float offsetX = centerBrickX - centerBallX;
-        const float offsetY = centerBrickY - centerBallY;
-
-        // Penetration depth of the ball on X and Y;
-        // Add half-extents of brick and ball, then subtract
-        // amount of overlap on that axis; the higher penetration
-        // depth is the prioritized collision and axis of bounce
-        const float penX = (float)(BRICK_WIDTH + BALL_SIZE) / 2 - fabsf(offsetX);
-        const float penY = (float)(BRICK_HEIGHT + BALL_SIZE) / 2 - fabsf(offsetY);
-
-        if (penX < penY)
-        {
-            ball.dx *= -1;
-            ball.x += offsetX > 0 ? -penX : penX;
-        }
-        else
-        {
-            ball.dy *= -1;
-            ball.y += offsetY > 0 ? -penY : penY;
-        }
-
-        // Slightly scale the y velocity to speed up the game
-        ball.dy *= 1.02f;
-    }
-
-    if (ball.y >= (float)VIRTUAL_HEIGHT)
-    {
-        gHealth--;
-        if (gHealth == 0)
-        {
-            if (!smSceneExists("game over"))
-            {
-                smAddScene("game over", nullptr, GameOverUpdate, GameOverDraw, GameOverExit);
-            }
-            smSetScene("game over", nullptr);
-        }
-        else
-        {
-            smSetScene("serve", nullptr);
-        }
-
-        PlaySound(*sdFind(HURT));
+        if (!ballDied) { i++; }
     }
 
     LevelUpdate(dt);
@@ -139,7 +170,10 @@ void PlayDraw(void)
     PaddleDraw();
     LevelDraw();
     LevelDrawParticles();
-    BallDraw();
+    for (int i = 0; i < gActiveBalls; i++)
+    {
+        BallDraw(&balls[i]);
+    }
 
     if (!isPaused) { return; }
 

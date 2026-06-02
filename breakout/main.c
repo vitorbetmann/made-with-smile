@@ -106,6 +106,7 @@ void load(void)
     GenBrickQuads();
     GenHeartsQuads();
     GenArrowQuads();
+    GenPowerUpQuads();
 }
 
 void update(const float dt)

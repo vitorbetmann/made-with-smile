@@ -11,6 +11,7 @@
 #include "Ball.h"
 #include "LevelMaker.h"
 #include "Play.h"
+#include "PowerUp.h"
 
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 // Variables
@@ -24,7 +25,14 @@ constexpr char PLAY_PROMPT[] = "Press Enter to serve!";
 
 void ServeEnter(void *args)
 {
-    BallInit(GetRandomValue(0, 6));
+    PowerUpsInit();
+
+    for (int i = 0; i < 3; i++)
+    {
+        BallInit(&balls[i], GetRandomValue(0, 6));
+    }
+    gActiveBalls = 1;
+
     if (!IsLevelActive()) { LevelCreate(gLevel); }
 }
 
@@ -32,7 +40,7 @@ void ServeUpdate(const float dt)
 {
     const float paddleLastX = paddle.x;
     PaddleUpdate(dt);
-    ball.x += paddle.x - paddleLastX;
+    balls[0].x += paddle.x - paddleLastX;
 
     if (IsKeyPressed(KEY_ENTER))
     {
@@ -48,7 +56,7 @@ void ServeDraw(void)
 {
     PaddleDraw();
     LevelDraw();
-    BallDraw();
+    BallDraw(&balls[0]);
 
     // Draw "Level [number]"
     char buffer[16];

@@ -51,6 +51,7 @@ static Rectangle ballQuads[BALL_ARRAY_SIZE];
 static Rectangle brickQuads[BRICK_ARRAY_SIZE];
 static Rectangle heartQuads[HEART_ARRAY_SIZE];
 static Rectangle arrowQuads[ARROW_ARRAY_SIZE];
+static Rectangle powerUpQuads[POWER_UP_AMOUNT];
 
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 // Functions
@@ -104,7 +105,7 @@ void GenPaddleQuads(void)
     }
 }
 
-Rectangle GetPaddleQuad(void)
+Rectangle GetPaddleRect(void)
 {
     return paddleQuads[paddle.size - 1 + 4 * (paddle.skin - 1)];
 }
@@ -142,9 +143,9 @@ void GenBallQuads(void)
     }
 }
 
-Rectangle GetBallQuad(void)
+Rectangle GetBallRect(const Ball *b)
 {
-    return ballQuads[ball.skin];
+    return ballQuads[b->skin];
 }
 
 void GenBrickQuads(void)
@@ -175,7 +176,7 @@ void GenBrickQuads(void)
     }
 }
 
-Rectangle GetBrickQuad(const Brick *brick)
+Rectangle GetBrickRect(const Brick *brick)
 {
     return brickQuads[brick->color * BRICK_COLORS + brick->tier];
 }
@@ -221,6 +222,27 @@ void GenArrowQuads(void)
 Rectangle GetArrowRect(const ArrowOrientation orientation)
 {
     return arrowQuads[orientation];
+}
+
+void GenPowerUpQuads(void)
+{
+    Vector2 origin = {0, 192};
+    for (int i = 0; i < POWER_UP_AMOUNT; i++)
+    {
+        Rectangle powerUpRect;
+        powerUpRect.x = origin.x;
+        powerUpRect.y = origin.y;
+        powerUpRect.width = (float)POWER_UP_SIZE;
+        powerUpRect.height = (float)POWER_UP_SIZE;
+        powerUpQuads[i] = powerUpRect;
+
+        origin.x += (float)POWER_UP_SIZE;
+    }
+}
+
+Rectangle GetPowerUpRect(const Type type)
+{
+    return powerUpQuads[type];
 }
 
 void LoadHighScores(void)

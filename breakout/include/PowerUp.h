@@ -1,81 +1,41 @@
+#pragma once
+
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 // Includes
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 
-#include <math.h>
+// —————————————————————————————————————————————————————————————————————————————————————————————————
+// Data types
+// —————————————————————————————————————————————————————————————————————————————————————————————————
 
-#include "Paddle.h"
+typedef enum
+{
+    SPAWN_BALLS = 3,
+    SPAWN_KEY = 9,
+} Type;
 
-#include "Constants.h"
-#include "TextureDict.h"
-#include "Util.h"
+typedef struct
+{
+    float x, y;
+    float dy;
+    Type type;
+    bool isActive;
+} PowerUp;
+
+// —————————————————————————————————————————————————————————————————————————————————————————————————
+// Prototypes
+// —————————————————————————————————————————————————————————————————————————————————————————————————
+
+void PowerUpActivate(Type type, float x, float y);
+int PowerUpCheckPaddleCollision(void);
+void PowerUpTrigger(Type type);
+
+void PowerUpsInit(void);
+void PowerUpsUpdate(float dt);
+void PowerUpsDraw(void);
+void PowerUpDeactivate(Type type);
 
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 // Variables
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 
-// static void PaddleInit(void);
-
-// —————————————————————————————————————————————————————————————————————————————————————————————————
-// Variables
-// —————————————————————————————————————————————————————————————————————————————————————————————————
-
-static constexpr int PADDLE_SPEED = 200;
-
-Paddle paddle;
-
-// —————————————————————————————————————————————————————————————————————————————————————————————————
-// Functions - Public
-// —————————————————————————————————————————————————————————————————————————————————————————————————
-
-void PaddleInit(void)
-{
-    PaddleReset();
-    paddle.dx = 0;
-    paddle.width = 64;
-    paddle.height = 16;
-    paddle.size = 2;
-    if (paddle.skin == 0) { paddle.skin = 1; }
-}
-
-void PaddleReset(void)
-{
-    paddle.x = (float)VIRTUAL_WIDTH / 2 - 32;
-    paddle.y = (float)VIRTUAL_HEIGHT - 32;
-}
-
-void PaddleUpdate(const float dt)
-{
-    if (IsKeyDown(KEY_LEFT))
-    {
-        paddle.dx = -PADDLE_SPEED;
-    }
-    else if (IsKeyDown(KEY_RIGHT))
-    {
-        paddle.dx = PADDLE_SPEED;
-    }
-    else
-    {
-        paddle.dx = 0;
-    }
-
-    if (paddle.dx < 0)
-    {
-        paddle.x = fmaxf(0, paddle.x + paddle.dx * dt);
-    }
-    else
-    {
-        paddle.x = fminf(paddle.x + paddle.dx * dt, (float)(VIRTUAL_WIDTH - paddle.width));
-    }
-}
-
-void PaddleDraw(void)
-{
-    const Rectangle dest = {paddle.x, paddle.y, (float)paddle.width, (float)paddle.height};
-    DrawTexturePro(*tdFind(MAIN), GetPaddleRect(), dest, (Vector2){0}, 0, WHITE);
-}
-
-Rectangle PaddleGetRect(void)
-{
-    return (Rectangle){paddle.x, paddle.y, (float)paddle.width, (float)paddle.height};
-}

@@ -40,7 +40,10 @@ void VictoryUpdate(float dt)
 void VictoryDraw(void)
 {
     PaddleDraw();
-    BallDraw();
+    for (int i = 0; i < gActiveBalls; i++)
+    {
+        BallDraw(&balls[i]);
+    }
 
     char buffer[32];
     snprintf(buffer, sizeof(buffer), LEVEL_COMPLETE_TEXT, gLevel);

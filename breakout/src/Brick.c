@@ -133,7 +133,7 @@ void BrickDraw(const Brick *brick)
     if (!brick->inPlay) { return; }
 
     const Rectangle dest = BrickGetRect(brick);
-    DrawTexturePro(*tdFind(MAIN), GetBrickQuad(brick), dest, (Vector2){0}, 0, WHITE);
+    DrawTexturePro(*tdFind(MAIN), GetBrickRect(brick), dest, (Vector2){0}, 0, WHITE);
 }
 
 void BrickDrawParticles(const Brick *brick)

@@ -18,6 +18,7 @@ add_executable(breakout
         src/Constants.c
         src/LevelMaker.c
         src/Brick.c
+        src/PowerUp.c
 
         src/dicts/SoundDict.c
         src/dicts/TextureDict.c

@@ -5,6 +5,7 @@
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 
 #include "Brick.h"
+#include "Ball.h"
 
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 // Prototypes
@@ -15,5 +16,5 @@ bool IsLevelActive(void);
 void LevelUpdate(float dt);
 void LevelDraw(void);
 void LevelDrawParticles(void);
-Brick *LevelCheckBrickCollision(void);
+Brick *LevelCheckBrickCollision(Ball *b);
 void LevelUnload(void);

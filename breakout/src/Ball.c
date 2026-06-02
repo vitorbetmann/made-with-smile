@@ -11,73 +11,65 @@
 #include "Util.h"
 
 // —————————————————————————————————————————————————————————————————————————————————————————————————
-// Data types
-// —————————————————————————————————————————————————————————————————————————————————————————————————
-
-// —————————————————————————————————————————————————————————————————————————————————————————————————
-// Prototypes
-// —————————————————————————————————————————————————————————————————————————————————————————————————
-
-// —————————————————————————————————————————————————————————————————————————————————————————————————
 // Variables
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 
-Ball ball;
+Ball balls[3];
 const int BALL_SIZE = 8;
 
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 // Functions
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 
-void BallInit(const int skin)
+void BallInit(Ball *b, const int skin)
 {
-    BallReset();
-    ball.skin = skin;
+    BallReset(b);
+    b->skin = skin;
 }
 
-void BallUpdate(const float dt)
+void BallUpdate(Ball *b, const float dt)
 {
-    ball.x += ball.dx * dt;
-    ball.y += ball.dy * dt;
+    b->x += b->dx * dt;
+    b->y += b->dy * dt;
 
-    if (ball.x <= 0)
+    if (b->x <= 0)
     {
-        ball.x = 0;
-        ball.dx *= -1;
+        b->x = 0;
+        b->dx *= -1;
         PlaySound(*sdFind(WALL_HIT));
     }
 
-    if (ball.x >= (float)VIRTUAL_WIDTH - 8)
+    if (b->x >= (float)VIRTUAL_WIDTH - 8)
     {
-        ball.x = (float)VIRTUAL_WIDTH - 8;
-        ball.dx *= -1;
+        b->x = (float)VIRTUAL_WIDTH - 8;
+        b->dx *= -1;
         PlaySound(*sdFind(WALL_HIT));
     }
 
-    if (ball.y <= 0)
+    if (b->y <= 0)
     {
-        ball.y = 0;
-        ball.dy *= -1;
+        b->y = 0;
+        b->dy *= -1;
         PlaySound(*sdFind(WALL_HIT));
     }
 }
 
-void BallDraw(void)
+void BallDraw(const Ball *b)
 {
-    const Rectangle dest = {ball.x, ball.y, (float)BALL_SIZE, (float)BALL_SIZE};
-    DrawTexturePro(*tdFind(MAIN), GetBallQuad(), dest, (Vector2){0}, 0, WHITE);
+    const Rectangle dest = {b->x, b->y, (float)BALL_SIZE, (float)BALL_SIZE};
+    DrawTexturePro(*tdFind(MAIN), GetBallRect(b), dest, (Vector2){0}, 0, WHITE);
 }
 
-void BallReset(void)
+void BallReset(Ball *b)
 {
-    ball.x = paddle.x + (float)(paddle.width - BALL_SIZE) / 2;
-    ball.y = paddle.y - (float)BALL_SIZE;
+    b->x = paddle.x + (float)(paddle.width - BALL_SIZE) / 2;
+    b->y = paddle.y - (float)BALL_SIZE;
 
-    ball.dx = (float)GetRandomValue(-200, 200);
-    ball.dy = (float)GetRandomValue(-60, -50);
+    b->dx = (float)GetRandomValue(-200, 200);
+    b->dy = (float)GetRandomValue(-60, -50);
 }
 
-Rectangle BallGetRect(void)
+Rectangle BallGetRect(const Ball *b)
 {
-    return (Rectangle){ball.x, ball.y, (float)BALL_SIZE, (float)BALL_SIZE};
+    return (Rectangle){b->x, b->y, (float)BALL_SIZE, (float)BALL_SIZE};
 }

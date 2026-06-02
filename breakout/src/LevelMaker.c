@@ -11,6 +11,7 @@
 #include "Brick.h"
 #include "raylib.h"
 #include "Constants.h"
+#include "PowerUp.h"
 
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 // Variables
@@ -113,6 +114,7 @@ void LevelUpdate(const float dt)
         if (!bricks[i]) { continue; }
         BrickUpdate(bricks[i], dt);
     }
+    PowerUpsUpdate(dt);
 }
 
 void LevelDraw(void)
@@ -122,6 +124,7 @@ void LevelDraw(void)
         if (!bricks[i]) { continue; }
         BrickDraw(bricks[i]);
     }
+    PowerUpsDraw();
 }
 
 void LevelDrawParticles(void)
@@ -149,14 +152,14 @@ void LevelUnload(void)
     bricks = nullptr;
 }
 
-Brick *LevelCheckBrickCollision(void)
+Brick *LevelCheckBrickCollision(Ball *b)
 {
     for (int i = 0; i < rows * cols; i++)
     {
         if (!bricks[i]) { continue; }
         if (!bricks[i]->inPlay) { continue; }
 
-        if (CheckCollisionRecs(BallGetRect(), BrickGetRect(bricks[i])))
+        if (CheckCollisionRecs(BallGetRect(b), BrickGetRect(bricks[i])))
         {
             // Only allow colliding with one brick, for corners
             return bricks[i];

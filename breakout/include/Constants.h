@@ -40,33 +40,34 @@ typedef struct
 extern Font gFont;
 
 // Window
-extern const int WINDOW_WIDTH;
-extern const int WINDOW_HEIGHT;
+constexpr int WINDOW_WIDTH = 1280;
+constexpr int WINDOW_HEIGHT = 720;
 
 // Virtual Window
-extern const int VIRTUAL_WIDTH;
-extern const int VIRTUAL_HEIGHT;
+constexpr int VIRTUAL_WIDTH = 432;
+constexpr int VIRTUAL_HEIGHT = 243;
 
-// Ball Behaviour
-extern const int STARTING_BOUNCE_DX;
-extern const int BOUNCE_ANGLE_MULTIPLIER;
+// Balls
+int gActiveBalls;
+constexpr int STARTING_BOUNCE_DX = 50;
+constexpr int BOUNCE_ANGLE_MULTIPLIER = 8;
 
 // Health & Heart
-extern const int MAX_HEALTH;
+constexpr int MAX_HEALTH = 3;
 
-extern const int HEART_WIDTH;
-extern const int HEART_HEIGHT;
+constexpr int HEART_WIDTH = 10;
+constexpr int HEART_HEIGHT = 9;
 
 // Score
-extern const int SCORE_COLOR;
-extern const int SCORE_TIER;
+constexpr int SCORE_COLOR = 25;
+constexpr int SCORE_TIER = 200;
 
-// Bricks
-extern const int BRICK_WIDTH;
-extern const int BRICK_HEIGHT;
+// Brick
+constexpr int BRICK_WIDTH = 32;
+constexpr int BRICK_HEIGHT = 16;
 
-extern const int TIER_THRESHOLD;
-extern const int COLOR_THRESHOLD;
+constexpr int TIER_THRESHOLD = 4;
+constexpr int COLOR_THRESHOLD = 4;
 
 // Player
 extern int gHealth;
@@ -79,4 +80,9 @@ extern int gBricksActive;
 // High Scores
 extern ScoreData gHighScores[10];
 extern char SAVE_FILE[];
-extern const int MAX_NAME_LENGTH;
+constexpr int MAX_NAME_LENGTH = 3;
+
+// Power Ups
+constexpr int POWER_UP_AMOUNT = 10;
+constexpr int POWER_UP_SIZE = 16;
+constexpr int POWER_UP_SPEED = 50;

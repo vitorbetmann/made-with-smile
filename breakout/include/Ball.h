@@ -22,15 +22,15 @@ typedef struct
 // Prototypes
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 
-void BallInit(int skin);
-void BallReset(void);
-void BallUpdate(float dt);
-void BallDraw(void);
-Rectangle BallGetRect(void);
+void BallInit(Ball *b, int skin);
+void BallReset(Ball *b);
+void BallUpdate(Ball *b, float dt);
+void BallDraw(const Ball *b);
+Rectangle BallGetRect(const Ball *b);
 
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 // Variables
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 
-extern Ball ball;
+extern Ball balls[];
 extern const int BALL_SIZE;
