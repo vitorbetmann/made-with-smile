@@ -40,6 +40,9 @@ void PaddleUpdate(float dt);
 void PaddleDraw(void);
 Rectangle PaddleGetRect(void);
 
+void PaddleGrow(void);
+void PaddleShrink(void);
+
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 // Variables
 // —————————————————————————————————————————————————————————————————————————————————————————————————

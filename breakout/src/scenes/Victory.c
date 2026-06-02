@@ -64,4 +64,5 @@ void VictoryExit(void)
     gLevel++;
     gHealth = MAX_HEALTH;
     LevelUnload();
+    PaddleReset();
 }

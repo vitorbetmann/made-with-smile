@@ -21,6 +21,7 @@
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 
 static bool isPaused;
+static int growScore;
 
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 // Functions
@@ -76,7 +77,10 @@ void PlayUpdate(const float dt)
         Brick *colBrick = LevelCheckBrickCollision(&balls[i]);
         if (colBrick)
         {
-            gScore += (colBrick->tier + 1) * SCORE_TIER + (colBrick->color + 1) * SCORE_COLOR;
+            const int hitScore = (colBrick->tier + 1) * SCORE_TIER + (colBrick->color + 1) *
+                                 SCORE_COLOR;
+            gScore += hitScore;
+            growScore += hitScore;
             BrickHit(colBrick);
 
             // Check game over
@@ -128,6 +132,12 @@ void PlayUpdate(const float dt)
             {
                 PowerUpActivate(SPAWN_BALLS, colBrick->x, colBrick->y);
             }
+
+            if (paddle.size <= 4 && growScore >= 50)
+            {
+                growScore = 0;
+                PaddleGrow();
+            }
         }
 
         if (balls[i].y >= (float)VIRTUAL_HEIGHT)
@@ -142,6 +152,7 @@ void PlayUpdate(const float dt)
 
         if (gActiveBalls == 0)
         {
+            growScore = 0;
             gHealth--;
             if (gHealth == 0)
             {
@@ -153,6 +164,7 @@ void PlayUpdate(const float dt)
             }
             else
             {
+                PaddleShrink();
                 smSetScene("serve", nullptr);
             }
 
