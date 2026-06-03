@@ -12,7 +12,6 @@
 #include "Dependencies.h"
 #include "GameOver.h"
 #include "LevelMaker.h"
-#include "Log.h"
 #include "Paddle.h"
 #include "Victory.h"
 
@@ -133,7 +132,7 @@ void PlayUpdate(const float dt)
                 PowerUpActivate(SPAWN_BALLS, colBrick->x, colBrick->y);
             }
 
-            if (paddle.size <= 4 && growScore >= 50)
+            if (paddle.size < 4 && growScore >= 5000)
             {
                 growScore = 0;
                 PaddleGrow();

@@ -21,6 +21,7 @@ static PowerUp powerUps[POWER_UP_AMOUNT];
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 
 static void ActivateBallPowerUp(void);
+static void ActivateKeyPowerUp(void);
 
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 // Functions
@@ -59,10 +60,12 @@ void PowerUpTrigger(const Type type)
     {
     case SPAWN_BALLS:
         ActivateBallPowerUp();
-        break;
+        return;
     case SPAWN_KEY:
+        ActivateKeyPowerUp();
         break;
-    default: ;
+    default:
+        break;
     }
 }
 
@@ -115,13 +118,16 @@ void ActivateBallPowerUp(void)
     {
         PlaySound(*sdFind(SCORE));
         gScore += 500;
+        return;
+    }
+    for (int i = gActiveBalls; i < 3; i++)
+    {
+        BallReset(&balls[i]);
     }
     gActiveBalls = 3;
-    for (int i = 0; i < gActiveBalls; i++)
-    {
-        if (balls[i].y > VIRTUAL_HEIGHT)
-        {
-            BallReset(&balls[i]);
-        }
-    }
+}
+
+void ActivateKeyPowerUp(void)
+{
+    UnlockSpecialBrick();
 }

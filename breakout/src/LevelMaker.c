@@ -25,12 +25,15 @@ static constexpr int COLS_MAX = 13;
 static Brick **bricks;
 static int rows, cols;
 
+static bool hasSpecialBrick;
+
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 // Functions
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 
 void LevelCreate(const int level)
 {
+    hasSpecialBrick = false;
     rows = GetRandomValue(ROWS_MIN, ROWS_MAX);
     cols = GetRandomValue(COLS_MIN, COLS_MAX);
     cols += cols % 2 == 0 ? 1 : 0; // Make it odd for style
@@ -77,7 +80,13 @@ void LevelCreate(const int level)
 
             int tempColor, tempTier;
             alternateFlag = !alternateFlag;
-            if (alternatePattern && alternateFlag)
+            if (!hasSpecialBrick && GetRandomValue(0, 10) != 0)
+            {
+                tempColor = 5;
+                tempTier = 1;
+                hasSpecialBrick = true;
+            }
+            else if (alternatePattern && alternateFlag)
             {
                 tempColor = color1;
                 tempTier = tier1;

@@ -30,6 +30,7 @@ typedef enum
     BRICK_RED,
     BRICK_PURPLE,
     BRICK_GOLD,
+    BRICK_SPECIAL,
 } BrickColor;
 
 static const Color VALUE_BLUE = {99, 155, 255, 255};
@@ -37,6 +38,8 @@ static const Color VALUE_GREEN = {106, 190, 47, 255};
 static const Color VALUE_RED = {217, 87, 99, 255};
 static const Color VALUE_PURPLE = {215, 123, 186, 255};
 static const Color VALUE_GOLD = {251, 242, 54, 255};
+
+static Brick *specialBrick;
 
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 // Functions
@@ -67,6 +70,15 @@ Brick *BrickInit(const int color, const int tier, const float x, const float y)
     psSetEmissionShape(b->ps, PS_SHAPE_RECT);
     psSetSpread(b->ps, 0, 0, (float)BRICK_WIDTH, (float)BRICK_HEIGHT);
 
+    if (color == 5 && tier == 1)
+    {
+        b->isSpecial = true;
+    }
+    else
+    {
+        b->isSpecial = false;
+    }
+
     return b;
 }
 
@@ -89,10 +101,19 @@ void BrickHit(Brick *brick)
     case BRICK_GOLD:
         brick->particleColor = VALUE_GOLD;
         break;
+    case BRICK_SPECIAL:
+    default:
+        break;
+    }
+
+    if (brick->isSpecial)
+    {
+        PowerUpActivate(SPAWN_KEY, brick->x, brick->y);
+        specialBrick = brick;
+        return;
     }
 
     psBurst(brick->ps, PARTICLES_TOTAL);
-
     PlaySound(*sdFind(BRICK_HIT_2));
     PlaySound(*sdFind(BRICK_HIT_2));
 
@@ -150,6 +171,14 @@ void BrickUnload(Brick *brick)
 {
     psDestroy(brick->ps);
     free(brick);
+    specialBrick = nullptr;
+}
+
+void UnlockSpecialBrick(void)
+{
+    specialBrick->color = 5;
+    specialBrick->tier = 0;
+    specialBrick->isSpecial = false;
 }
 
 // —————————————————————————————————————————————————————————————————————————————————————————————————

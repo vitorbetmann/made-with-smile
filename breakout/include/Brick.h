@@ -26,6 +26,8 @@ typedef struct
 
     ParticleSystem *ps;
     Color particleColor;
+
+    bool isSpecial;
 } Brick;
 
 // —————————————————————————————————————————————————————————————————————————————————————————————————
@@ -39,6 +41,7 @@ void BrickDraw(const Brick *brick);
 void BrickDrawParticles(const Brick *brick);
 Rectangle BrickGetRect(const Brick *brick);
 void BrickUnload(Brick *brick);
+void UnlockSpecialBrick(void);
 
 // —————————————————————————————————————————————————————————————————————————————————————————————————
 // Variables

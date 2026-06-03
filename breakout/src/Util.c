@@ -33,7 +33,7 @@ static constexpr int BALLS_IN_ROW_2 = 3;
 // Brick data
 static constexpr int BRICK_COLORS = 4;
 static constexpr int BRICK_TIERS = 5;
-static constexpr int BRICK_SPECIAL = 1;
+static constexpr int BRICK_SPECIAL = 2;
 
 static constexpr int BRICK_ROWS = 4;
 static constexpr int BRICK_COLS = 6;
@@ -166,7 +166,7 @@ void GenBrickQuads(void)
             brickQuads[counter] = brick;
 
             counter++;
-            if (counter == BRICK_ARRAY_SIZE) { break; }
+            if (counter == BRICK_COLORS * BRICK_TIERS + 1) { break; }
 
             skin++;
             skin %= BRICK_TIERS;
@@ -174,6 +174,11 @@ void GenBrickQuads(void)
         }
         origin.y += (float)BRICK_HEIGHT;
     }
+
+    // Special locked brick
+    brickQuads[BRICK_COLORS * BRICK_TIERS + BRICK_SPECIAL - 1] = (Rectangle){
+        160, 48, BRICK_WIDTH, BRICK_HEIGHT
+    };
 }
 
 Rectangle GetBrickRect(const Brick *brick)
