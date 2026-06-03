@@ -1,0 +1,93 @@
+# ——————————————————————————————————————————————————————————————————————————————
+# Web build (HTML5/WASM) via Emscripten
+#
+# Prerequisites:
+#   1. Emscripten SDK installed and activated:
+#        source /path/to/emsdk/emsdk_env.sh
+#
+#   2. Web-compiled raylib at libs/libraylib_web.a.
+#      Build it once from the raylib 6.1 source:
+#        git clone https://github.com/raysan5/raylib /tmp/raylib
+#        mkdir /tmp/raylib/build-web && cd /tmp/raylib/build-web
+#        emcmake cmake .. -DPLATFORM=Web
+#        emmake make
+#        cp /tmp/raylib/build-web/raylib/libraylib.a \
+#           /path/to/breakout/libs/libraylib_web.a
+#
+# Usage:
+#   make -f Makefile.web          # build
+#   make -f Makefile.web serve    # build + serve on http://localhost:8080
+#   make -f Makefile.web clean    # remove build/web/
+# ——————————————————————————————————————————————————————————————————————————————
+
+EMCC        = emcc
+PROJECT     = breakout
+OUT_DIR     = build/web
+RAYLIB_WEB  = libs/libraylib_web.a
+
+SOURCES = \
+    main.c \
+    src/Paddle.c \
+    src/Ball.c \
+    src/Util.c \
+    src/Constants.c \
+    src/LevelMaker.c \
+    src/Brick.c \
+    src/PowerUp.c \
+    src/dicts/SoundDict.c \
+    src/dicts/TextureDict.c \
+    src/scenes/Start.c \
+    src/scenes/PaddleSelect.c \
+    src/scenes/Serve.c \
+    src/scenes/Play.c \
+    src/scenes/GameOver.c \
+    src/scenes/Victory.c \
+    src/scenes/EnterHighScore.c \
+    src/scenes/HighScore.c \
+    libs/smile/src/Log/Log.c \
+    libs/smile/src/ParticleSystem/ParticleSystem.c \
+    libs/smile/src/SceneManager/SceneManager.c \
+    libs/smile/src/internal/Common/Common.c \
+    libs/smile/src/internal/Test/Test.c
+
+INCLUDES = \
+    -I libs \
+    -I libs/smile/include \
+    -I libs/smile/src \
+    -I libs/smile/src/Log \
+    -I libs/smile/src/ParticleSystem \
+    -I libs/smile/src/SceneManager \
+    -I libs/smile/src/internal \
+    -I libs/smile/src/internal/Common \
+    -I libs/smile/src/internal/Test \
+    -I include \
+    -I include/dicts \
+    -I include/scenes
+
+EMFLAGS = \
+    -std=c23 \
+    -DPLATFORM_WEB \
+    -D_DEFAULT_SOURCE \
+    -DSMILE_WARN \
+    -DSMILE_INFO \
+    -Os \
+    -s USE_GLFW=3 \
+    -s ASYNCIFY \
+    -s ALLOW_MEMORY_GROWTH=1 \
+    -s TOTAL_MEMORY=67108864 \
+    --preload-file assets \
+    --shell-file shell.html
+
+.PHONY: all serve clean
+
+all: $(OUT_DIR)/$(PROJECT).html
+
+$(OUT_DIR)/$(PROJECT).html: $(SOURCES) $(RAYLIB_WEB)
+	mkdir -p $(OUT_DIR)
+	$(EMCC) $(SOURCES) $(INCLUDES) $(EMFLAGS) $(RAYLIB_WEB) -o $(OUT_DIR)/$(PROJECT).html
+
+serve: all
+	python3 -m http.server 8080 --directory $(OUT_DIR)
+
+clean:
+	rm -rf $(OUT_DIR)

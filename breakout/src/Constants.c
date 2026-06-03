@@ -16,6 +16,9 @@ int gHealth = MAX_HEALTH;
 int gScore = 0;
 int gLevel;
 
+// Balls
+int gActiveBalls;
+
 // Level Maker
 int gBricksActive = 0;
 

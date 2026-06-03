@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Breakout</title>
+    <style>
+      body { margin: 0; overflow: hidden; background-color: #000; }
+      canvas.emscripten { border: 0 none; background-color: #000; display: block; }
+    </style>
+    <script>
+      window.addEventListener('keydown', function(e) {
+        if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' '].includes(e.key)) {
+          e.preventDefault();
+        }
+      });
+    </script>
+  </head>
+  <body>
+    <canvas class="emscripten" id="canvas" oncontextmenu="event.preventDefault()" tabindex=-1></canvas>
+    <script>
+      var Module = { canvas: document.getElementById('canvas') };
+    </script>
+    {{{ SCRIPT }}}
+  </body>
+</html>

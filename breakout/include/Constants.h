@@ -48,7 +48,7 @@ constexpr int VIRTUAL_WIDTH = 432;
 constexpr int VIRTUAL_HEIGHT = 243;
 
 // Balls
-int gActiveBalls;
+extern int gActiveBalls;
 constexpr int STARTING_BOUNCE_DX = 50;
 constexpr int BOUNCE_ANGLE_MULTIPLIER = 8;
 
