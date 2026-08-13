@@ -1,6 +1,6 @@
 # 🍬 Match 3 (Candy Crush clone)
 
-🕹️ [Play it on itch.io](https://vitorbetmann.itch.io/match-3)
+🕹️ Not yet published
 
 ## Featuring Smile's
 
