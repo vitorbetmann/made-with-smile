@@ -3,6 +3,11 @@
 #### Recreated classic games in C to deepen understanding of low-level programming and game architecture, triggering the development of the Smile library.
 #### Shoutout to [CS50's Introduction to Game Development](https://cs50.harvard.edu/games/) for the great lessons and game assets.
 
+## 💎 Match-3 (🚧 In Progress)
+
+- 🗃️ [Repo](https://github.com/vitorbetmann/made-with-smile/tree/main/match-3)
+- 🕹️ Not yet published
+
 ## 🧱 Breakout
 - 🗃️ [Repo](https://github.com/vitorbetmann/made-with-smile/tree/main/breakout)
 - 🕹️ [Play it on itch.io](https://vitorbetmann.itch.io/breakout)
