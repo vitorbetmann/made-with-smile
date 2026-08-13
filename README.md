@@ -3,7 +3,7 @@
 #### Recreated classic games in C to deepen understanding of low-level programming and game architecture, triggering the development of the Smile library.
 #### Shoutout to [CS50's Introduction to Game Development](https://cs50.harvard.edu/games/) for the great lessons and game assets.
 
-## 💎 Match-3 (🚧 In Progress)
+## 🍬 Match 3 (Candy Crush clone) (🚧 In Progress)
 
 - 🗃️ [Repo](https://github.com/vitorbetmann/made-with-smile/tree/main/match-3)
 - 🕹️ Not yet published
